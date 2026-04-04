@@ -691,70 +691,49 @@
             font-size: 14px;
         }
         
-        /* Member Page */
-        .member-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 15px 15px 30px;
-            text-align: center;
-        }
-        
-        /* 头部登录快捷入口 */
-        .member-login-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .member-login-btn {
-            flex: 1;
-            padding: 10px 15px;
-            border-radius: 20px;
+        .btn-wechat-login {
+            padding: 12px 30px;
+            border-radius: 25px;
             font-size: 14px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
-            text-align: center;
-            border: none;
-            transition: all 0.2s;
-        }
-        
-        .member-login-btn.register {
-            background: white;
-            color: var(--primary);
-        }
-        
-        .member-login-btn.wechat {
             background: #07C160;
             color: white;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
         }
         
-        .member-login-btn.wechat:active {
+        .btn-wechat-login:active {
             background: #059B4C;
         }
         
-        .member-login-btn.login {
-            background: rgba(255,255,255,0.2);
+        /* Member Page */
+        .member-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            border: 1px solid rgba(255,255,255,0.5);
+            padding: 20px 15px;
+            text-align: center;
         }
         
-        .member-login-btn:active {
-            transform: scale(0.98);
+        /* 头部简洁登录/注册链接 */
+        .member-auth-links {
+            font-size: 13px;
+            margin-bottom: 15px;
             opacity: 0.9;
         }
         
-        .member-user-info {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .member-auth-links span {
+            cursor: pointer;
+            padding: 3px 8px;
+            border-radius: 4px;
+            transition: background 0.2s;
         }
         
-        .member-user-info.hidden {
-            display: none;
+        .member-auth-links span:active {
+            background: rgba(255,255,255,0.2);
         }
         
         .member-avatar {
@@ -1651,21 +1630,14 @@
     <!-- 会员页 -->
     <div class="page" id="page-member">
         <div class="member-header">
-            <!-- 未登录时的快捷登录入口 -->
-            <div class="member-login-bar" id="memberLoginBar">
-                <button class="member-login-btn wechat" onclick="wechatQuickLogin()">
-                    <span>💬</span>
-                    <span>微信一键登录</span>
-                </button>
-                <button class="member-login-btn register" onclick="showPage('register')">注册</button>
-                <button class="member-login-btn login" onclick="showPage('login')">登录</button>
+            <div class="member-auth-links" id="memberAuthLinks">
+                <span onclick="showPage('login')">登录</span>
+                <span style="margin:0 5px;">|</span>
+                <span onclick="showPage('register')">注册</span>
             </div>
-            <!-- 登录后的用户信息 -->
-            <div class="member-user-info" id="memberUserInfo">
-                <div class="member-avatar" id="memberAvatar">👤</div>
-                <div class="member-name" id="memberName">游客用户</div>
-                <div class="member-level" id="memberLevel">普通会员</div>
-            </div>
+            <div class="member-avatar" id="memberAvatar">👤</div>
+            <div class="member-name" id="memberName">游客用户</div>
+            <div class="member-level" id="memberLevel">普通会员</div>
         </div>
         <div class="member-stats">
             <div class="stat-item">
@@ -1764,7 +1736,11 @@
                 <label class="form-label">确认密码</label>
                 <input type="password" class="form-input" id="regConfirmPassword" placeholder="请再次输入密码">
             </div>
-            <button class="btn-primary" style="width:100%;margin-top:20px;" onclick="doRegister()">注册</button>
+            <button class="btn-wechat-login" style="width:100%;margin-top:15px;" onclick="wechatQuickLogin()">
+                <span>💬</span> 微信一键登录
+            </button>
+            <div style="text-align:center;margin:10px 0;color:#999;font-size:12px;">— 或 —</div>
+            <button class="btn-primary" style="width:100%;" onclick="doRegister()">注册</button>
             <div class="auth-footer">
                 已有账号？<span onclick="showPage('login')" style="color:var(--primary);cursor:pointer;">立即登录</span>
             </div>
@@ -2679,28 +2655,20 @@
         function updateMemberUI() {
             const user = getCurrentUser();
             const loggedInMenu = document.getElementById('loggedInMenu');
-            const loggedOutMenu = document.getElementById('loggedOutMenu');
-            const memberLoginBar = document.getElementById('memberLoginBar');
-            const memberUserInfo = document.getElementById('memberUserInfo');
+            const memberAuthLinks = document.getElementById('memberAuthLinks');
             
             if (user) {
                 document.getElementById('memberName').textContent = user.nickname || user.phone;
                 document.getElementById('memberLevel').textContent = user.level || '普通会员';
                 document.getElementById('memberAvatar').textContent = '😊';
                 if (loggedInMenu) loggedInMenu.style.display = 'block';
-                if (loggedOutMenu) loggedOutMenu.style.display = 'none';
-                // 显示用户信息，隐藏登录栏
-                if (memberLoginBar) memberLoginBar.style.display = 'none';
-                if (memberUserInfo) memberUserInfo.classList.remove('hidden');
+                if (memberAuthLinks) memberAuthLinks.style.display = 'none';
             } else {
                 document.getElementById('memberName').textContent = '游客用户';
                 document.getElementById('memberLevel').textContent = '普通会员';
                 document.getElementById('memberAvatar').textContent = '👤';
                 if (loggedInMenu) loggedInMenu.style.display = 'none';
-                if (loggedOutMenu) loggedOutMenu.style.display = 'block';
-                // 隐藏用户信息，显示登录栏
-                if (memberLoginBar) memberLoginBar.style.display = 'flex';
-                if (memberUserInfo) memberUserInfo.classList.add('hidden');
+                if (memberAuthLinks) memberAuthLinks.style.display = 'block';
             }
         }
         
