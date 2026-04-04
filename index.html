@@ -2693,18 +2693,21 @@
                                 isWechatUser: true
                             };
                             setCurrentUser(mockUser);
+                            showPage('member');
                         } else {
                             // 用户取消或其他错误
                             showToast('微信登录失败，请使用手机号登录');
+                            showPage('login');
                         }
                     });
                 } else {
-                    // 没有wx.invoke，显示提示
-                    showToast('请在微信中打开此页面以使用微信登录');
+                    // 没有wx.invoke，跳转到登录页
+                    showToast('微信环境未正确配置，使用手机号登录');
+                    showPage('login');
                 }
             } else {
-                // 非微信环境，显示提示并引导到登录页
-                showToast('微信一键登录仅在微信中可用，请使用手机号登录');
+                // 非微信环境，直接跳转到登录页
+                showPage('login');
             }
         }
         
