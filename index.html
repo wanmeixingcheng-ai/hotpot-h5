@@ -431,7 +431,7 @@
             max-width: 430px;
             background: white;
             display: flex;
-            justify-content: space-around;
+            justify-content: space-evenly;
             padding: 4px 0;
             box-shadow: 0 -2px 10px var(--shadow);
             z-index: 100;
@@ -441,12 +441,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 2px;
             color: #666;
-            font-size: 13px;
+            font-size: 11px;
             cursor: pointer;
-            padding: 5px 15px;
+            padding: 3px 8px;
             position: relative;
+            flex: 1;
         }
         
         .tab-item.active {
@@ -454,7 +455,7 @@
         }
         
         .tab-item span:first-child {
-            font-size: 22px;
+            font-size: 20px;
         }
         
         .tab-item .badge {
