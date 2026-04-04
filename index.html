@@ -2119,9 +2119,10 @@
             loadProducts();
             startAutoSlide();
             
-            // 恢复上次访问的页面
+            // 恢复上次访问的页面（只恢复首页、分类、购物车、会员）
             const savedPage = localStorage.getItem('currentPage') || 'home';
-            if (savedPage !== 'home') {
+            const validPages = ['home', 'category', 'cart', 'member'];
+            if (validPages.includes(savedPage)) {
                 showPage(savedPage);
             }
             
@@ -2297,6 +2298,11 @@
         // 添加购物车
         function addToCart(productId) {
             const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) {
+                console.error('商品未找到:', productId);
+                showToast('商品不存在');
+                return;
+            }
             const existingItem = cart.find(item => item.id === productId);
             
             if (existingItem) {
@@ -2305,15 +2311,21 @@
                 cart.push({ ...product, quantity: 1 });
             }
             
-            localStorage.setItem('cart', JSON.stringify(cart));
+            saveCart();
             updateCartBadge();
             showToast('已加入购物车 🛒');
+        }
+        
+        // 保存购物车
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
         }
         
         // 更新购物车角标
         function updateCartBadge() {
             const badge = document.getElementById('cartBadge');
-            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            if (!badge) return;
+            const total = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
             if (total > 0) {
                 badge.style.display = 'flex';
                 badge.textContent = total;
@@ -2622,7 +2634,11 @@
             const tab = document.querySelector(`.tab-item[data-page="${pageName}"]`);
             if (tab) tab.classList.add('active');
             
-            if (pageName === 'cart') renderCart();
+            if (pageName === 'cart') {
+                cart = JSON.parse(localStorage.getItem('cart')) || [];
+                updateCartBadge();
+                renderCart();
+            }
             if (pageName === 'checkout') renderCheckout();
             if (pageName === 'admin') loadProducts();
             if (pageName === 'orders') renderOrders();
