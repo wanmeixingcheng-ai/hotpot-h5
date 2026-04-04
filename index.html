@@ -2119,6 +2119,12 @@
             loadProducts();
             startAutoSlide();
             
+            // 恢复上次访问的页面
+            const savedPage = localStorage.getItem('currentPage') || 'home';
+            if (savedPage !== 'home') {
+                showPage(savedPage);
+            }
+            
             // 滑动手势支持（只在主内容区域生效）
             let touchStartX = 0;
             let touchStartY = 0;
@@ -2605,6 +2611,9 @@
                 pageHistory.push(pageName);
                 historyIndex = pageHistory.length - 1;
             }
+            
+            // 保存当前页面到 localStorage
+            localStorage.setItem('currentPage', pageName);
             
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pageName).classList.add('active');
