@@ -2117,6 +2117,32 @@
             updateMemberUI();
             loadProducts();
             startAutoSlide();
+            
+            // 滑动手势支持
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const minSwipeDistance = 80;
+            
+            document.addEventListener('touchstart', e => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, {passive: true});
+            
+            document.addEventListener('touchend', e => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+            
+            function handleSwipe() {
+                const distance = touchEndX - touchStartX;
+                if (Math.abs(distance) < minSwipeDistance) return;
+                if (distance > 0) {
+                    // 右滑 - 后退
+                    goBack();
+                } else {
+                    // 左滑 - 前进
+                    goForward();
+                }
+            }
         });
         
         // 渲染分类
