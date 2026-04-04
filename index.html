@@ -1736,7 +1736,7 @@
                 <label class="form-label">确认密码</label>
                 <input type="password" class="form-input" id="regConfirmPassword" placeholder="请再次输入密码">
             </div>
-            <button class="btn-wechat-login" style="width:100%;margin-top:15px;" onclick="showToast('微信登录功能开发中，敬请期待')">
+            <button class="btn-wechat-login" style="width:100%;margin-top:15px;" onclick="wechatQuickLogin()">
                 <span>💬</span> 微信一键登录
             </button>
             <div style="text-align:center;margin:10px 0;color:#999;font-size:12px;">— 或 —</div>
@@ -2701,11 +2701,11 @@
                     });
                 } else {
                     // 没有wx.invoke，显示提示
-                    showToast('请在微信中打开此页面以使用微信登录');
+                    showToast('微信环境未正确配置，请联系管理员');
                 }
             } else {
                 // 非微信环境，显示提示
-                showToast('请在微信中打开网页，使用微信一键登录');
+                showToast('请在微信中进入网页使用一键登录');
             }
         }
         
