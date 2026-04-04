@@ -64,14 +64,19 @@
         }
         
         .header-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
+            font-size: 16px;
+            font-weight: 700;
+            color: #222;
             flex: 1;
             text-align: center;
             max-width: 200px;
             cursor: pointer;
             white-space: nowrap;
+        }
+        
+        .header-title.on-dark {
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
         
         .header-more {
@@ -1927,8 +1932,8 @@
     
     <!-- 商品详情页 -->
     <div class="page" id="page-product">
-        <div class="header" style="background:transparent;position:absolute;z-index:10;">
-            <div class="header-title" onclick="goBack()">← 返回</div>
+        <div class="header" style="background:rgba(0,0,0,0.3);border-radius:20px;position:absolute;z-index:10;">
+            <div class="header-title on-dark" onclick="goBack()">← 返回</div>
         </div>
         <div id="productDetailContent"></div>
     </div>
