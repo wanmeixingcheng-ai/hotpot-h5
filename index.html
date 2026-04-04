@@ -2070,7 +2070,8 @@
         let currentPayment = 'wechat';
         let paymentCountdownTimer = null;
         let pendingOrder = null;
-        let previousPage = 'home'; // 记录上一页用于返回
+        let pageHistory = ['home']; // 页面访问历史栈
+        let historyIndex = 0; // 当前在历史中的位置
         
         // Banner轮播
         let currentSlide = 0;
@@ -2594,9 +2595,15 @@
         
         // 页面切换
         function showPage(pageName) {
-            // 记录上一页（除了商品详情页和特殊页面）
-            if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons'].includes(pageName)) {
-                previousPage = pageName;
+            // 如果目标页面不是当前页，则添加到历史
+            const currentPage = pageHistory[historyIndex];
+            if (pageName !== currentPage) {
+                // 如果不是在历史末尾，清除后面的历史
+                if (historyIndex < pageHistory.length - 1) {
+                    pageHistory = pageHistory.slice(0, historyIndex + 1);
+                }
+                pageHistory.push(pageName);
+                historyIndex = pageHistory.length - 1;
             }
             
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -2621,15 +2628,43 @@
         
         // 返回上一页
         function goBack() {
-            showPage(previousPage || 'home');
+            if (historyIndex > 0) {
+                historyIndex--;
+                const prevPage = pageHistory[historyIndex];
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + prevPage).classList.add('active');
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                const tab = document.querySelector(`.tab-item[data-page="${prevPage}"]`);
+                if (tab) tab.classList.add('active');
+                if (prevPage === 'cart') renderCart();
+                if (prevPage === 'orders') renderOrders();
+                if (prevPage === 'coupons') renderMemberCoupons();
+            } else {
+                // 如果没有上一页了，可以尝试使用浏览器历史
+                if (window.history.length > 1) {
+                    window.history.back();
+                }
+            }
         }
         
-        // 前进（使用浏览器历史）
+        // 前进到下一页
         function goForward() {
-            if (history.length > 1) {
-                history.forward();
+            if (historyIndex < pageHistory.length - 1) {
+                historyIndex++;
+                const nextPage = pageHistory[historyIndex];
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById('page-' + nextPage).classList.add('active');
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                const tab = document.querySelector(`.tab-item[data-page="${nextPage}"]`);
+                if (tab) tab.classList.add('active');
+                if (nextPage === 'cart') renderCart();
+                if (nextPage === 'orders') renderOrders();
+                if (nextPage === 'coupons') renderMemberCoupons();
             } else {
-                showPage('home');
+                // 如果没有下一页了，可以尝试使用浏览器历史
+                if (window.history.length > 1) {
+                    window.history.forward();
+                }
             }
         }
         
@@ -2664,11 +2699,6 @@
                     <button onclick="addToCart(${product.id});showPage('cart');" style="width:100%;padding:14px;background:var(--primary);color:white;border:none;border-radius:25px;font-size:16px;cursor:pointer;font-weight:600;">加入购物车</button>
                 </div>
             `;
-            // 记录当前来源页面，切换到商品详情页时不要覆盖
-            const currentPage = document.querySelector('.page.active')?.id.replace('page-', '') || 'home';
-            if (!['product', 'success'].includes(currentPage)) {
-                previousPage = currentPage;
-            }
             showPage('product');
         }
         
