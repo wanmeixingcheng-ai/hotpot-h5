@@ -1940,6 +1940,10 @@
     
     <!-- 底部导航 -->
     <div class="tab-bar">
+        <div class="tab-item" onclick="goBack()">
+            <span>⇖</span>
+            <span>返回</span>
+        </div>
         <div class="tab-item active" onclick="showPage('home')" data-page="home">
             <span>🏠</span>
             <span>首页</span>
@@ -1956,6 +1960,10 @@
         <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
             <span>我</span>
+        </div>
+        <div class="tab-item" onclick="goForward()">
+            <span>⇗</span>
+            <span>前进</span>
         </div>
     </div>
     
@@ -2587,6 +2595,15 @@
         // 返回上一页
         function goBack() {
             showPage(previousPage || 'home');
+        }
+        
+        // 前进（使用浏览器历史）
+        function goForward() {
+            if (history.length > 1) {
+                history.forward();
+            } else {
+                showPage('home');
+            }
         }
         
         // 去结算
