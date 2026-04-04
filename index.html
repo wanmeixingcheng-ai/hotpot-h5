@@ -2117,6 +2117,40 @@
             updateMemberUI();
             loadProducts();
             startAutoSlide();
+            
+            // 滑动手势支持（只在主内容区域生效）
+            let touchStartX = 0;
+            let touchStartY = 0;
+            const minSwipeDistance = 60;
+            const maxVerticalDistance = 100;
+            
+            document.addEventListener('touchstart', e => {
+                const target = e.target;
+                // 排除底部导航栏和按钮区域的滑动
+                if (target.closest('.tab-bar') || target.closest('button') || target.closest('.btn-')) {
+                    return;
+                }
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }, {passive: true});
+            
+            document.addEventListener('touchend', e => {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = Math.abs(touchEndY - touchStartY);
+                
+                // 只处理水平滑动，且垂直偏移不能太大
+                if (Math.abs(deltaX) >= minSwipeDistance && deltaY < maxVerticalDistance) {
+                    if (deltaX > 0) {
+                        // 右滑 - 后退
+                        goBack();
+                    } else {
+                        // 左滑 - 前进
+                        goForward();
+                    }
+                }
+            }, {passive: true});
         });
         
         // 渲染分类
