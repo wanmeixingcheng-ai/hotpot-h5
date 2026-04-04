@@ -2697,17 +2697,15 @@
                         } else {
                             // 用户取消或其他错误
                             showToast('微信登录失败，请使用手机号登录');
-                            showPage('login');
                         }
                     });
                 } else {
-                    // 没有wx.invoke，跳转到登录页
-                    showToast('微信环境未正确配置，使用手机号登录');
-                    showPage('login');
+                    // 没有wx.invoke，显示提示
+                    showToast('请在微信中打开此页面以使用微信登录');
                 }
             } else {
-                // 非微信环境，直接跳转到登录页
-                showPage('login');
+                // 非微信环境，显示提示
+                showToast('请在微信中打开网页，使用微信一键登录');
             }
         }
         
