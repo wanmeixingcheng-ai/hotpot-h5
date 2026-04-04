@@ -695,8 +695,66 @@
         .member-header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 30px 15px;
+            padding: 15px 15px 30px;
             text-align: center;
+        }
+        
+        /* 头部登录快捷入口 */
+        .member-login-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .member-login-btn {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            border: none;
+            transition: all 0.2s;
+        }
+        
+        .member-login-btn.register {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .member-login-btn.wechat {
+            background: #07C160;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        
+        .member-login-btn.wechat:active {
+            background: #059B4C;
+        }
+        
+        .member-login-btn.login {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        
+        .member-login-btn:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        
+        .member-user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .member-user-info.hidden {
+            display: none;
         }
         
         .member-avatar {
@@ -1593,9 +1651,21 @@
     <!-- 会员页 -->
     <div class="page" id="page-member">
         <div class="member-header">
-            <div class="member-avatar" id="memberAvatar">👤</div>
-            <div class="member-name" id="memberName">游客用户</div>
-            <div class="member-level" id="memberLevel">普通会员</div>
+            <!-- 未登录时的快捷登录入口 -->
+            <div class="member-login-bar" id="memberLoginBar">
+                <button class="member-login-btn wechat" onclick="wechatQuickLogin()">
+                    <span>💬</span>
+                    <span>微信一键登录</span>
+                </button>
+                <button class="member-login-btn register" onclick="showPage('register')">注册</button>
+                <button class="member-login-btn login" onclick="showPage('login')">登录</button>
+            </div>
+            <!-- 登录后的用户信息 -->
+            <div class="member-user-info" id="memberUserInfo">
+                <div class="member-avatar" id="memberAvatar">👤</div>
+                <div class="member-name" id="memberName">游客用户</div>
+                <div class="member-level" id="memberLevel">普通会员</div>
+            </div>
         </div>
         <div class="member-stats">
             <div class="stat-item">
@@ -1637,18 +1707,6 @@
             <div class="menu-item" onclick="logout()">
                 <div class="menu-icon order">🚪</div>
                 <div class="menu-text">退出登录</div>
-                <div class="menu-arrow">›</div>
-            </div>
-        </div>
-        <div class="menu-list" id="loggedOutMenu" style="margin-top:15px;">
-            <div class="menu-item" onclick="showPage('login')">
-                <div class="menu-icon order">🔐</div>
-                <div class="menu-text">登录</div>
-                <div class="menu-arrow">›</div>
-            </div>
-            <div class="menu-item" onclick="showPage('register')">
-                <div class="menu-icon order">📝</div>
-                <div class="menu-text">注册</div>
                 <div class="menu-arrow">›</div>
             </div>
         </div>
@@ -2622,6 +2680,8 @@
             const user = getCurrentUser();
             const loggedInMenu = document.getElementById('loggedInMenu');
             const loggedOutMenu = document.getElementById('loggedOutMenu');
+            const memberLoginBar = document.getElementById('memberLoginBar');
+            const memberUserInfo = document.getElementById('memberUserInfo');
             
             if (user) {
                 document.getElementById('memberName').textContent = user.nickname || user.phone;
@@ -2629,12 +2689,54 @@
                 document.getElementById('memberAvatar').textContent = '😊';
                 if (loggedInMenu) loggedInMenu.style.display = 'block';
                 if (loggedOutMenu) loggedOutMenu.style.display = 'none';
+                // 显示用户信息，隐藏登录栏
+                if (memberLoginBar) memberLoginBar.style.display = 'none';
+                if (memberUserInfo) memberUserInfo.classList.remove('hidden');
             } else {
                 document.getElementById('memberName').textContent = '游客用户';
                 document.getElementById('memberLevel').textContent = '普通会员';
                 document.getElementById('memberAvatar').textContent = '👤';
                 if (loggedInMenu) loggedInMenu.style.display = 'none';
                 if (loggedOutMenu) loggedOutMenu.style.display = 'block';
+                // 隐藏用户信息，显示登录栏
+                if (memberLoginBar) memberLoginBar.style.display = 'flex';
+                if (memberUserInfo) memberUserInfo.classList.add('hidden');
+            }
+        }
+        
+        // 微信一键登录
+        function wechatQuickLogin() {
+            // 检测是否在微信环境
+            const isWechat = /MicroMessenger/i.test(navigator.userAgent);
+            
+            if (isWechat) {
+                // 在微信环境中，尝试使用微信登录
+                if (typeof wx !== 'undefined' && wx.invoke) {
+                    // 尝试调用微信登录
+                    wx.invoke('login', {}, function(res) {
+                        if (res.err_msg && res.err_msg.indexOf('ok') !== -1) {
+                            // 登录成功，使用code
+                            showToast('微信登录成功');
+                            // 模拟登录成功（实际需要后端通过code获取用户信息）
+                            const mockUser = {
+                                phone: 'wx_' + res.code.substring(0, 8),
+                                nickname: '微信用户',
+                                level: '微信会员',
+                                isWechatUser: true
+                            };
+                            setCurrentUser(mockUser);
+                        } else {
+                            // 用户取消或其他错误
+                            showToast('微信登录失败，请使用手机号登录');
+                        }
+                    });
+                } else {
+                    // 没有wx.invoke，显示提示
+                    showToast('请在微信中打开此页面以使用微信登录');
+                }
+            } else {
+                // 非微信环境，显示提示并引导到登录页
+                showToast('微信一键登录仅在微信中可用，请使用手机号登录');
             }
         }
         
