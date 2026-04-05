@@ -1760,15 +1760,15 @@
         
         <div class="section">
             <div class="section-header">
-                <div class="section-title">🔥 热门推荐</div>
-                <div class="section-more">查看更多 ›</div>
+                <div class="section-title" id="hotTitle">🔥 热门推荐</div>
+                <div class="section-more" id="hotMore">查看更多 ›</div>
             </div>
             <div class="products-grid" id="hotProducts"></div>
         </div>
         
         <div class="section">
             <div class="section-header">
-                <div class="section-title">🍽️ 猜你喜欢</div>
+                <div class="section-title" id="likeTitle">🍽️ 猜你喜欢</div>
             </div>
             <div class="products-grid" id="recommendProducts"></div>
         </div>
@@ -1777,7 +1777,7 @@
     <!-- 分类页 -->
     <div class="page" id="page-category">
         <div class="header">
-            <div class="header-title">商品分类</div>
+            <div class="header-title" id="categoryPageTitle">商品分类</div>
         </div>
         <div class="category-layout">
             <div class="category-left" id="categoryList"></div>
@@ -1829,10 +1829,10 @@
                 <a href="#" class="login-link" onclick="showToast('请联系客服找回密码')">找回密码</a>
             </div>
             
-            <button class="login-btn" onclick="doLogin()">登 录</button>
+            <button class="login-btn" id="loginBtn" onclick="doLogin()">登 录</button>
             
             <div class="login-divider">
-                <span>社交账号登录</span>
+                <span id="socialLoginTitle">社交账号登录</span>
             </div>
             
             <div class="login-social">
@@ -1886,7 +1886,7 @@
             <button class="login-btn" onclick="doRegister()">注 册</button>
             
             <div class="login-links" style="margin-top:20px;">
-                <a href="#" class="login-link" onclick="showPage('login')">已有账号？立即登录</a>
+                <a href="#" class="login-link" id="haveAccountLink" onclick="showPage('login')">已有账号？立即登录</a>
             </div>
         </div>
     </div>
@@ -2251,6 +2251,12 @@
                 btn_login: '登录',
                 btn_register: '注册',
                 btn_logout: '退出登录',
+                // 首页
+                hot_title: '热门推荐',
+                like_title: '猜你喜欢',
+                view_more: '查看更多',
+                // 分类页
+                category_title: '商品分类',
                 // 登录页
                 login_title: '会员登录',
                 login_account: '请输入邮箱/手机号',
@@ -2258,6 +2264,7 @@
                 login_register: '立即注册',
                 login_forgot: '找回密码',
                 login_no_account: '已有账号？立即登录',
+                social_login: '社交账号登录',
                 // 注册页
                 register_title: '会员注册',
                 register_phone: '请输入手机号',
@@ -2333,12 +2340,20 @@
                 btn_login: 'ログイン',
                 btn_register: '登録',
                 btn_logout: 'ログアウト',
+                // 首页
+                hot_title: '人気おすすめ',
+                like_title: 'おすすめ',
+                view_more: 'もっと見る',
+                // 分类页
+                category_title: '商品カテゴリー',
+                // 登录页
                 login_title: '会員ログイン',
                 login_account: 'メール/電話番号を入力',
                 login_password: 'パスワードを入力',
                 login_register: '新規登録',
                 login_forgot: 'パスワードを忘れた',
                 login_no_account: 'アカウントある？ログインへ',
+                social_login: 'SNSログイン',
                 register_title: '新規会員登録',
                 register_phone: '電話番号を入力',
                 register_code: '確認コードを入力',
@@ -2406,12 +2421,20 @@
                 btn_login: 'Login',
                 btn_register: 'Register',
                 btn_logout: 'Logout',
+                // 首页
+                hot_title: 'Hot Recommendations',
+                like_title: 'Recommended',
+                view_more: 'View More',
+                // 分类页
+                category_title: 'Categories',
+                // 登录页
                 login_title: 'Member Login',
                 login_account: 'Enter email/phone',
                 login_password: 'Enter password',
                 login_register: 'Register Now',
                 login_forgot: 'Forgot Password',
                 login_no_account: 'Have account? Login',
+                social_login: 'Social Login',
                 register_title: 'Member Register',
                 register_phone: 'Enter phone number',
                 register_code: 'Enter verification code',
@@ -2493,6 +2516,16 @@
             if (tabs[1]) tabs[1].textContent = t('nav_category');
             if (tabs[2]) tabs[2].textContent = t('nav_cart');
             if (tabs[3]) tabs[3].textContent = t('nav_profile');
+            // 更新首页标题
+            const hotTitle = document.getElementById('hotTitle');
+            if (hotTitle) hotTitle.textContent = t('hot_title');
+            const likeTitle = document.getElementById('likeTitle');
+            if (likeTitle) likeTitle.textContent = t('like_title');
+            const hotMore = document.getElementById('hotMore');
+            if (hotMore) hotMore.textContent = t('view_more');
+            // 更新分类页标题
+            const categoryTitle = document.getElementById('categoryPageTitle');
+            if (categoryTitle) categoryTitle.textContent = t('category_title');
             // 更新搜索框
             const searchInput = document.getElementById('searchInput');
             if (searchInput) searchInput.placeholder = t('search_placeholder');
@@ -2503,13 +2536,16 @@
             if (loginAccount) loginAccount.placeholder = t('login_account');
             const loginPassword = document.getElementById('loginPassword');
             if (loginPassword) loginPassword.placeholder = t('login_password');
-            // 更新按钮文字
-            document.querySelectorAll('.login-btn').forEach(btn => {
-                if (btn.textContent.includes('登录') || btn.textContent.includes('ログイン') || btn.textContent.includes('Login')) {
-                    btn.textContent = t('btn_login');
-                }
-            });
-            // 更新链接
+            // 更新登录按钮
+            const loginBtn = document.getElementById('loginBtn');
+            if (loginBtn) loginBtn.textContent = t('btn_login');
+            // 更新社交账号登录标题
+            const socialLoginTitle = document.getElementById('socialLoginTitle');
+            if (socialLoginTitle) socialLoginTitle.textContent = t('social_login');
+            // 更新已有账号链接
+            const haveAccountLink = document.getElementById('haveAccountLink');
+            if (haveAccountLink) haveAccountLink.textContent = t('login_no_account');
+            // 更新链接（立即注册、找回密码）
             document.querySelectorAll('.login-link').forEach(link => {
                 if (link.textContent.includes('立即注册') || link.textContent.includes('新規登録') || link.textContent.includes('Register')) {
                     link.textContent = t('login_register');
