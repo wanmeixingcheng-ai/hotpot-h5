@@ -2408,7 +2408,7 @@
         </div>
         <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
-            <span class="tab-text">我</span>
+            <span class="tab-text" id="memberTabText">我</span>
         </div>
     </div>
     
@@ -2635,7 +2635,7 @@
                 tag_low_stock: '残りわずか',
                 tag_spicy: '辛さ中和',
                 btn_add_cart: 'カートに追加',
-                btn_checkout: '结算',
+                btn_checkout: 'お会計へ進む',
                 btn_login: 'ログイン',
                 btn_register: '登録',
                 btn_logout: 'ログアウト',
@@ -3009,6 +3009,9 @@
             // 更新购物车导航文字（单独处理因为有badge）
             const cartTabText = document.getElementById('cartTabText');
             if (cartTabText) cartTabText.textContent = t('nav_cart');
+            // 更新"我"导航文字
+            const memberTabText = document.getElementById('memberTabText');
+            if (memberTabText) memberTabText.textContent = t('nav_profile');
             // 更新首页标题
             const hotTitle = document.getElementById('hotTitle');
             if (hotTitle) hotTitle.textContent = t('hot_title');
@@ -4032,7 +4035,7 @@
             if (tab) {
                 tab.classList.add('active');
                 const text = tab.querySelector('.tab-text');
-                if (text) text.style.color = 'var(--primary)';
+                if (text) text.style.color = '#E53935';
             }
             
             if (pageName === 'cart') renderCart();
