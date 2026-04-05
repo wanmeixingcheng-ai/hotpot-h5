@@ -3781,6 +3781,7 @@
         // 更新购物车角标
         function updateCartBadge() {
             const badge = document.getElementById('cartBadge');
+            if (!badge) return;
             const total = cart.reduce((sum, item) => sum + item.quantity, 0);
             if (total > 0) {
                 badge.style.display = 'flex';
@@ -3801,7 +3802,8 @@
         function renderCart() {
             const content = document.getElementById('cartContent');
             const footer = document.getElementById('cartFooter');
-            
+            if (!content) return;
+
             if (cart.length === 0) {
                 content.innerHTML = `
                     <div class="cart-empty">
@@ -3810,10 +3812,10 @@
                         <button class="btn-primary" id="cartGoShopBtn" onclick="showPage('home')">${t('btn_go_shop')}</button>
                     </div>
                 `;
-                footer.style.display = 'none';
+                if (footer) footer.style.display = 'none';
                 return;
             }
-            
+
             content.innerHTML = cart.map(item => `
                 <div class="cart-item">
                     <img class="cart-item-image" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80x80?text=火锅'">
@@ -3828,10 +3830,11 @@
                     </div>
                 </div>
             `).join('');
-            
+
             const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-            document.getElementById('cartTotal').textContent = '¥' + total.toFixed(2);
-            footer.style.display = 'flex';
+            const cartTotalEl = document.getElementById('cartTotal');
+            if (cartTotalEl) cartTotalEl.textContent = '¥' + total.toFixed(2);
+            if (footer) footer.style.display = 'flex';
         }
         
         // 修改数量
@@ -3851,6 +3854,7 @@
         // 渲染结算页
         function renderCheckout() {
             const itemsContainer = document.getElementById('checkoutItems');
+            if (!itemsContainer) return;
             itemsContainer.innerHTML = cart.map(item => `
                 <div class="order-item">
                     <img class="order-item-image" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/50x50?text=火锅'">
@@ -3863,22 +3867,23 @@
                     </div>
                 </div>
             `).join('');
-            
+
             updateCheckoutSummary();
         }
-        
+
         // 更新结算汇总
         function updateCheckoutSummary() {
             const goodsAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
             const deliveryFee = currentDelivery === 'delivery' ? (goodsAmount >= 99 ? 0 : 10) : 0;
             const couponDiscount = selectedCoupon ? selectedCoupon.amount : 0;
             const finalTotal = goodsAmount + deliveryFee - couponDiscount;
-            
-            document.getElementById('goodsAmount').textContent = '¥' + goodsAmount.toFixed(2);
-            document.getElementById('deliveryFee').textContent = deliveryFee === 0 ? '免费' : '¥' + deliveryFee.toFixed(2);
-            document.getElementById('couponDiscount').textContent = '-¥' + couponDiscount.toFixed(2);
-            document.getElementById('finalTotal').textContent = '¥' + Math.max(0, finalTotal).toFixed(2);
-            document.getElementById('payAmount').textContent = '¥' + Math.max(0, finalTotal).toFixed(2);
+
+            const setText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+            setText('goodsAmount', '¥' + goodsAmount.toFixed(2));
+            setText('deliveryFee', deliveryFee === 0 ? '免费' : '¥' + deliveryFee.toFixed(2));
+            setText('couponDiscount', '-¥' + couponDiscount.toFixed(2));
+            setText('finalTotal', '¥' + Math.max(0, finalTotal).toFixed(2));
+            setText('payAmount', '¥' + Math.max(0, finalTotal).toFixed(2));
         }
         
         // 设置配送方式
@@ -3886,32 +3891,34 @@
             currentDelivery = type;
             document.querySelectorAll('.delivery-tab').forEach(tab => tab.classList.remove('active'));
             event.target.classList.add('active');
-            
+
             const addressForm = document.getElementById('addressForm');
             const pickupInfo = document.getElementById('pickupInfo');
-            
+
             if (type === 'delivery') {
-                addressForm.classList.add('active');
-                pickupInfo.classList.remove('active');
+                if (addressForm) addressForm.classList.add('active');
+                if (pickupInfo) pickupInfo.classList.remove('active');
             } else {
-                addressForm.classList.remove('active');
-                pickupInfo.classList.add('active');
+                if (addressForm) addressForm.classList.remove('active');
+                if (pickupInfo) pickupInfo.classList.add('active');
             }
-            
+
             updateCheckoutSummary();
         }
-        
+
         // 选择支付方式
         function selectPayment(method) {
             currentPayment = method;
             document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
-            event.currentTarget.classList.add('selected');
-            
+            if (event && event.currentTarget) event.currentTarget.classList.add('selected');
+
             const icons = { wechat: '💚', alipay: '💙', paypay: '💛', line: '💚' };
             const names = { wechat: '微信支付', alipay: '支付宝', paypay: 'PayPay', line: 'LINE Pay' };
-            
-            document.getElementById('paymentIcon').textContent = icons[method];
-            document.getElementById('paymentName').textContent = names[method];
+
+            const iconEl = document.getElementById('paymentIcon');
+            const nameEl = document.getElementById('paymentName');
+            if (iconEl) iconEl.textContent = icons[method] || '';
+            if (nameEl) nameEl.textContent = names[method] || '';
         }
         
         // 打开支付二维码
@@ -4848,6 +4855,10 @@
             currentProductId = productId; // 保存当前商品ID
             const product = PRODUCTS.find(p => p.id === productId);
             const content = document.getElementById('productDetailContent');
+            if (!product || !content) {
+                showToast('商品信息加载失败');
+                return;
+            }
             const productName = getTranslatedProductName(product);
             content.innerHTML = `
                 <img src="${product.image}" style="width:100%;aspect-ratio:1;object-fit:cover;" onerror="this.src='https://via.placeholder.com/400x400?text=火锅'">
@@ -4881,14 +4892,18 @@
         
         // 更新会员统计
         function updateMemberStats() {
-            document.getElementById('orderCount').textContent = orders.length;
-            document.getElementById('couponCount').textContent = memberCoupons.filter(c => !c.used).length;
-            document.getElementById('integral').textContent = orders.reduce((sum, o) => sum + Math.floor(o.total), 0);
+            const orderCountEl = document.getElementById('orderCount');
+            const couponCountEl = document.getElementById('couponCount');
+            const memberPointsEl = document.getElementById('memberPoints');
+            if (orderCountEl) orderCountEl.textContent = orders.length;
+            if (couponCountEl) couponCountEl.textContent = memberCoupons.filter(c => !c.used).length;
+            if (memberPointsEl) memberPointsEl.textContent = orders.reduce((sum, o) => sum + Math.floor(o.total), 0);
         }
         
         // 渲染订单列表
         function renderOrders() {
             const content = document.getElementById('orderListContent');
+            if (!content) return;
             if (orders.length === 0) {
                 content.innerHTML = `
                     <div class="cart-empty">
@@ -4924,10 +4939,11 @@
                 </div>
             `).join('');
         }
-        
+
         // 渲染优惠券
         function renderMemberCoupons() {
             const content = document.getElementById('couponListContent');
+            if (!content) return;
             if (memberCoupons.length === 0) {
                 content.innerHTML = `
                     <div class="cart-empty">
@@ -4952,10 +4968,11 @@
                 </div>
             `).join('');
         }
-        
+
         // 渲染收货地址
         function renderAddresses() {
             const content = document.getElementById('addressListContent');
+            if (!content) return;
             if (addresses.length === 0) {
                 addresses = [
                     { id: 1, name: '张三', phone: '138****8888', address: '北京市朝阳区建国路88号', isDefault: true }
@@ -4976,11 +4993,13 @@
         
         // 加载库存管理
         function loadProducts() {
-            document.getElementById('totalProducts').textContent = PRODUCTS.length;
-            const lowStockCount = PRODUCTS.filter(p => p.stock < 10).length;
-            document.getElementById('lowStock').textContent = lowStockCount;
-            
+            const totalEl = document.getElementById('totalProducts');
+            const lowEl = document.getElementById('lowStock');
             const container = document.getElementById('adminProductList');
+            if (totalEl) totalEl.textContent = PRODUCTS.length;
+            const lowStockCount = PRODUCTS.filter(p => p.stock < 10).length;
+            if (lowEl) lowEl.textContent = lowStockCount;
+            if (!container) return;
             container.innerHTML = PRODUCTS.map(p => `
                 <div class="admin-product">
                     <img class="admin-product-image" src="${p.image}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/70?text=?'">
@@ -4995,22 +5014,29 @@
                 </div>
             `).join('');
         }
-        
+
         // 编辑库存
         function editStock(productId) {
             const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
             editingProductId = productId;
-            document.getElementById('editStockName').value = product.name;
-            document.getElementById('editStockNum').value = product.stock;
-            document.getElementById('stockModal').classList.add('active');
+            const nameEl = document.getElementById('editStockName');
+            const numEl = document.getElementById('editStockNum');
+            const modal = document.getElementById('stockModal');
+            if (nameEl) nameEl.value = product.name;
+            if (numEl) numEl.value = product.stock;
+            if (modal) modal.classList.add('active');
         }
-        
+
         function closeStockModal() {
-            document.getElementById('stockModal').classList.remove('active');
+            const modal = document.getElementById('stockModal');
+            if (modal) modal.classList.remove('active');
         }
-        
+
         function saveStock() {
-            const newStock = parseInt(document.getElementById('editStockNum').value);
+            const numEl = document.getElementById('editStockNum');
+            if (!numEl) return;
+            const newStock = parseInt(numEl.value);
             if (editingProductId) {
                 const product = PRODUCTS.find(p => p.id === editingProductId);
                 if (product) {
@@ -5026,6 +5052,7 @@
         // 提示框
         function showToast(message) {
             const toast = document.getElementById('toast');
+            if (!toast) return;
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 2000);
