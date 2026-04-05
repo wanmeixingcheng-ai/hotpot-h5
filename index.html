@@ -4053,6 +4053,9 @@
             if (pageName === 'coupons') renderMemberCoupons();
             if (pageName === 'addresses') renderAddresses();
             
+            // 首页启动轮播
+            if (pageName === 'home') startAutoSlide();
+            
             // 分类页不执行 scrollTo，避免影响切换体验
             if (pageName !== 'category') {
                 window.scrollTo(0, 0);
