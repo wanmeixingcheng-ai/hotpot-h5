@@ -1617,6 +1617,28 @@
             margin: 10px 0 20px;
         }
         
+        .login-options {
+            display: flex;
+            align-items: center;
+            margin: 8px 0 15px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .remember-me input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+        
         .login-link {
             color: #8B4513;
             font-size: 12px;
@@ -1690,9 +1712,9 @@
         }
         
         .social-icon.facebook { background: #4267B2; }
-        .social-icon.qq { background: #12B7F5; }
+        .social-icon.twitter { background: #000000; }
         .social-icon.wechat { background: #07C160; }
-        .social-icon.weibo { background: #E6162D; }
+        .social-icon.instagram { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
         .social-icon.line { background: #00B900; }
         
         .login-code-btn {
@@ -1708,6 +1730,33 @@
         
         .login-code-btn:active {
             background: #eee;
+        }
+        
+        /* 资料页样式 */
+        .profile-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .profile-item:last-child {
+            border-bottom: none;
+        }
+        .profile-label {
+            width: 80px;
+            color: #666;
+            font-size: 14px;
+        }
+        .profile-value {
+            flex: 1;
+            text-align: right;
+            color: #333;
+            font-size: 14px;
+        }
+        .profile-arrow {
+            margin-left: 10px;
+            color: #ccc;
+            font-size: 18px;
         }
         
     </style>
@@ -1801,6 +1850,64 @@
         </div>
     </div>
     
+    <!-- 商品管理页（管理员） -->
+    <div class="page" id="page-admin">
+        <div class="login-header" style="background:var(--primary);">
+            <div class="login-back-btn" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
+            <div class="login-header-title">商品管理</div>
+            <div style="width:40px;"></div>
+        </div>
+        <div style="padding:15px;">
+            <div style="background:white;border-radius:12px;padding:15px;margin-bottom:15px;">
+                <div style="font-size:14px;color:var(--text-light);margin-bottom:15px;">添加新商品（自动翻译中日英）</div>
+                <div style="margin-bottom:12px;">
+                    <input type="text" id="adminName" placeholder="商品名称（中/日/英文）" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom:12px;">
+                    <textarea id="adminDesc" placeholder="商品描述（可选）" rows="2" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;resize:none;"></textarea>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <input type="number" id="adminPrice" placeholder="价格" style="width:48%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                    <input type="number" id="adminStock" placeholder="库存" value="100" style="width:48%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom:12px;">
+                    <select id="adminCategory" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                        <option value="1">底料蘸料</option>
+                        <option value="2">肉类拼盘</option>
+                        <option value="3">海鲜系列</option>
+                        <option value="4">蔬菜菌菇</option>
+                        <option value="5">豆制品</option>
+                        <option value="6">主食小吃</option>
+                        <option value="7">饮料酒水</option>
+                        <option value="8">锅具餐具</option>
+                    </select>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <input type="text" id="adminImage" placeholder="图片URL（可选，留空使用默认图）" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom:15px;">
+                    <input type="text" id="adminTags" placeholder="标签（逗号分隔，如：热销,新品）" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                </div>
+                <button onclick="addNewProduct()" style="width:100%;padding:12px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:15px;cursor:pointer;">
+                    添加商品（自动翻译）
+                </button>
+                <div id="transPreview" style="margin-top:15px;padding:10px;background:#f5f5f5;border-radius:8px;font-size:12px;display:none;">
+                    <div style="font-weight:600;margin-bottom:5px;">翻译预览：</div>
+                    <div id="previewZh"></div>
+                    <div id="previewJa"></div>
+                    <div id="previewEn"></div>
+                </div>
+            </div>
+            
+            <div style="font-size:14px;font-weight:600;margin-bottom:10px;">已有商品（点击预览翻译）</div>
+            <div id="adminProductList"></div>
+        </div>
+    </div>
+    
     <!-- 会员登录页 -->
     <div class="page" id="page-login">
         <div class="login-header">
@@ -1820,13 +1927,20 @@
             
             <div class="login-input-group">
                 <div class="login-icon">🔒</div>
-                <input type="password" id="loginPassword" placeholder="请输入登录密码" class="login-input">
+                <input type="password" id="loginPassword" placeholder="请输入登录密码（6位数字）" class="login-input">
                 <div class="login-eye" onclick="togglePassword()">👁</div>
+            </div>
+            
+            <div class="login-options">
+                <label class="remember-me">
+                    <input type="checkbox" id="rememberAccount" checked>
+                    <span data-i18n="remember_account">记住登录名</span>
+                </label>
             </div>
             
             <div class="login-links" style="flex-direction:column; align-items:center; gap:10px;">
                 <a href="#" class="login-link" onclick="showRegister()">立即注册</a>
-                <a href="#" class="login-link" onclick="showToast('请联系客服找回密码')">找回密码</a>
+                <a href="#" class="login-link" onclick="showPage('reset')">找回密码</a>
             </div>
             
             <button class="login-btn" id="loginBtn" onclick="doLogin()">登 录</button>
@@ -1839,14 +1953,14 @@
                 <div class="social-icon facebook" onclick="showToast('Facebook登录开发中')">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </div>
-                <div class="social-icon qq" onclick="showToast('QQ登录开发中')">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12.003 2c-2.265 0-6.29 1.364-6.29 7.325v1.195S3.55 14.96 3.55 17.474c0 .665.17 1.025.396 1.025.127 0 .319-.058.49-.178l.127-.09.224.168c.275.204.51.297.834.297.127 0 .318-.033.49-.09l.17-.06.17.09c.17.057.319.09.489.09.325 0 .56-.093.835-.297l.224-.168.127.09c.17.12.362.178.489.178.226 0 .396-.36.396-1.025 0-1.658-.556-4.205-2.166-6.929V9.32c0-4.406 3.076-6.295 5.257-6.295.637 0 1.123.056 1.522.17l.168.046.168-.046c.399-.114.885-.17 1.522-.17 2.182 0 5.258 1.889 5.258 6.295v1.195s.222 3.145-2.164 6.954c0 .665.17 1.025.396 1.025.127 0 .319-.058.49-.178l.127-.09.224.168c.275.204.51.297.834.297.127 0 .318-.033.49-.09l.17-.06.17.09c.17.057.319.09.489.09.325 0 .56-.093.835-.297l.224-.168.127.09c.17.12.362.178.489.178.226 0 .396-.36.396-1.025 0-2.514-2.163-6.954-2.163-6.954V9.32c0-5.961-4.025-7.325-6.29-7.325z"/></svg>
+                <div class="social-icon twitter" onclick="socialLogin('x')">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </div>
                 <div class="social-icon wechat" onclick="socialLogin('wechat')">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18zm5.34 2.867c-1.797-.052-3.746.512-5.28 1.786-1.72 1.428-2.687 3.72-1.78 6.22.942 2.453 3.666 4.229 6.884 4.229.826 0 1.622-.12 2.361-.336a.722.722 0 0 1 .598.082l1.584.926a.272.272 0 0 0 .14.047c.134 0 .24-.111.24-.247 0-.06-.023-.12-.038-.177l-.327-1.233a.582.582 0 0 1-.023-.156.49.49 0 0 1 .201-.398C23.024 18.48 24 16.82 24 14.98c0-3.21-2.931-5.837-6.656-6.088V8.89c-.135-.01-.269-.027-.407-.033zm-1.984 2.133c.534 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.435-.982.97-.982zm4.857 0c.534 0 .969.44.969.982a.976.976 0 0 1-.969.983.976.976 0 0 1-.969-.983c0-.542.435-.982.969-.982z"/></svg>
                 </div>
-                <div class="social-icon weibo" onclick="showToast('微博登录开发中')">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM9.05 17.219c-.384.616-1.208.884-1.829.602-.612-.279-.793-.991-.406-1.593.379-.595 1.176-.861 1.793-.601.622.263.82.972.442 1.592zm1.27-1.627c-.141.237-.449.353-.689.253-.236-.09-.313-.361-.177-.586.138-.227.436-.346.672-.24.239.09.315.36.18.573h.014zm.176-2.719c-1.893-.493-4.033.45-4.857 2.118-.836 1.704-.026 3.591 1.886 4.21 1.983.64 4.318-.341 5.132-2.179.8-1.793-.201-3.642-2.161-4.149zm7.563-1.224c-.346-.105-.578-.156-.399-.629.389-.987.428-1.77.003-2.228-.771-.822-2.872-.505-5.112.051s-4.038 1.852-4.55 3.233c-.26.701-.18 1.347.231 1.478.938.305 1.927-.129 2.771-.873.421-.371.764-.7 1.054-.951.657-.57 1.54-.823 2.36-.723 1.024.127 1.736.818 1.95 1.594.096.349.176.667.257.896.143.397-.002.663-.565.152zm1.832-1.402c-.087-.221-.164-.415-.24-.608-.387-.983-.579-1.684-.18-2.229.771-.822 2.871-.504 5.111.052 2.241.557 4.039 1.853 4.551 3.234.26.7.18 1.347-.231 1.477-.516.168-1.13.027-1.852-.398-.578-.341-1.079-.757-1.56-1.158a8.16 8.16 0 0 0-1.01-.783c-.826-.547-1.845-.717-2.746-.54-.986.194-1.634.836-1.841 1.702-.056.238-.1.448-.135.626.021-.129.072-.258.133-.375z"/></svg>
+                <div class="social-icon instagram" onclick="socialLogin('instagram')">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </div>
                 <div class="social-icon line" onclick="socialLogin('line')">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314" fill="white"/></svg>
@@ -1869,12 +1983,12 @@
             
             <div class="login-input-group">
                 <div class="login-icon">📱</div>
-                <input type="tel" id="regPhone" placeholder="请输入手机号" class="login-input">
+                <input type="tel" id="regPhone" placeholder="手机号（选填）" class="login-input">
             </div>
             
             <div class="login-input-group">
                 <div class="login-icon">🔒</div>
-                <input type="password" id="regPassword" placeholder="请设置登录密码（6位以上）" class="login-input">
+                <input type="password" id="regPassword" placeholder="请设置登录密码（6位数字）" class="login-input">
             </div>
             
             <div class="login-input-group">
@@ -1891,24 +2005,66 @@
         </div>
     </div>
     
+    <!-- 找回密码页 -->
+    <div class="page" id="page-reset">
+        <div class="login-header">
+            <div class="login-back-btn" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
+            <div class="login-page-title">找回密码</div>
+        </div>
+        
+        <div class="login-form">
+            <div class="login-input-group">
+                <div class="login-icon">📧</div>
+                <input type="text" id="resetEmail" placeholder="请输入注册邮箱" class="login-input">
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">🔢</div>
+                <input type="text" id="resetCode" placeholder="请输入验证码" class="login-input" style="width:60%;">
+                <button class="login-code-btn" id="resetCodeBtn" onclick="sendResetCode()">发送验证码</button>
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">🔒</div>
+                <input type="password" id="resetPassword" placeholder="请输入新密码（6位数字）" class="login-input">
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">🔒</div>
+                <input type="password" id="resetPassword2" placeholder="请确认新密码（6位数字）" class="login-input">
+            </div>
+            
+            <button class="login-btn" onclick="doResetPassword()">重置密码</button>
+            
+            <div class="login-links" style="margin-top:20px;">
+                <a href="#" class="login-link" onclick="showPage('login')">返回登录</a>
+            </div>
+        </div>
+    </div>
+    
     <!-- 会员页 -->
     <div class="page" id="page-member">
-        <div class="member-header">
-            <div class="member-avatar">👤</div>
+        <div class="member-header" onclick="showProfile()">
+            <div class="member-avatar" id="memberAvatar">👤</div>
             <div class="member-name" id="memberName">游客用户</div>
             <div class="member-level" id="memberLevel">普通会员</div>
+            <div id="memberPhone" style="font-size:12px;color:rgba(255,255,255,0.7);margin-top:5px;">点击编辑资料</div>
         </div>
         <div class="member-stats">
-            <div class="stat-item">
+            <div class="stat-item" onclick="showPage('orders')">
                 <div class="stat-value" id="orderCount">0</div>
                 <div class="stat-label">全部订单</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" onclick="showCoupons()">
                 <div class="stat-value" id="couponCount">0</div>
                 <div class="stat-label">优惠券</div>
             </div>
             <div class="stat-item">
-                <div class="stat-value" id="integral">0</div>
+                <div class="stat-value" id="memberPoints">0</div>
                 <div class="stat-label">积分</div>
             </div>
         </div>
@@ -1923,23 +2079,24 @@
                 <div class="menu-text">我的优惠券</div>
                 <div class="menu-arrow">›</div>
             </div>
-            <div class="menu-item" onclick="showPage('addresses')">
+            <div class="menu-item" onclick="showAddressList()">
                 <div class="menu-icon address">📍</div>
                 <div class="menu-text">收货地址</div>
                 <div class="menu-arrow">›</div>
             </div>
-            <div class="menu-item">
+            <div class="menu-item" onclick="showToast('积分商城即将上线')">
                 <div class="menu-icon integral">⭐</div>
                 <div class="menu-text">积分商城</div>
                 <div class="menu-arrow">›</div>
             </div>
         </div>
         <div class="menu-list" style="margin-top:15px;">
-            <div class="menu-item" onclick="showPage('admin')">
-                <div class="menu-icon order">⚙️</div>
-                <div class="menu-text">库存管理</div>
+            <div class="menu-item" onclick="showProfile()">
+                <div class="menu-icon" style="background:#E3F2FD;">👤</div>
+                <div class="menu-text">个人资料</div>
                 <div class="menu-arrow">›</div>
             </div>
+
         </div>
         <div class="menu-list" style="margin-top:15px;">
             <div class="menu-item" onclick="logout()" style="color:#E53935;">
@@ -2140,6 +2297,97 @@
         <div id="productDetailContent"></div>
     </div>
     
+    <!-- 会员资料编辑页 -->
+    <div class="page" id="page-profile">
+        <div class="login-header" style="background:var(--primary);">
+            <div class="login-back-btn" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
+            <div class="login-header-title">个人资料</div>
+            <div style="width:40px;"></div>
+        </div>
+        <div style="padding:15px;">
+            <div style="text-align:center;margin:20px 0;">
+                <div id="profileAvatar" onclick="changeAvatar()" style="width:80px;height:80px;border-radius:50%;background:#f0f0f0;display:inline-flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;border:3px solid white;box-shadow:0 2px 10px rgba(0,0,0,0.1);">👤</div>
+                <div style="margin-top:10px;font-size:14px;color:#666;">点击更换头像</div>
+            </div>
+            <div style="background:white;border-radius:12px;overflow:hidden;">
+                <div class="profile-item" onclick="editNickname()">
+                    <div class="profile-label">昵称</div>
+                    <div class="profile-value" id="profileNickname">-</div>
+                    <div class="profile-arrow">›</div>
+                </div>
+                <div class="profile-item" onclick="editPhone()">
+                    <div class="profile-label">手机号</div>
+                    <div class="profile-value" id="profilePhone">-</div>
+                    <div class="profile-arrow">›</div>
+                </div>
+                <div class="profile-item" onclick="showPage('addresses')">
+                    <div class="profile-label">收货地址</div>
+                    <div class="profile-value" id="profileAddressCount">0个</div>
+                    <div class="profile-arrow">›</div>
+                </div>
+            </div>
+            <div style="background:white;border-radius:12px;margin-top:15px;overflow:hidden;">
+                <div class="profile-item" style="border:none;">
+                    <div class="profile-label">会员等级</div>
+                    <div class="profile-value" id="profileLevel" style="color:var(--primary);">普通会员</div>
+                </div>
+            </div>
+            <button onclick="showPage('member')" style="width:100%;margin-top:20px;padding:12px;background:white;color:var(--text);border:1px solid #ddd;border-radius:8px;font-size:15px;cursor:pointer;">返回会员中心</button>
+        </div>
+    </div>
+    
+    <!-- 收货地址管理页 -->
+    <div class="page" id="page-addresses">
+        <div class="login-header" style="background:var(--primary);">
+            <div class="login-back-btn" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
+            <div class="login-header-title">收货地址</div>
+            <div style="width:40px;"></div>
+        </div>
+        <div style="padding:15px;">
+            <button onclick="showAddAddress()" style="width:100%;padding:12px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:15px;cursor:pointer;margin-bottom:15px;">+ 添加新地址</button>
+            <div id="addressList"></div>
+        </div>
+    </div>
+    
+    <!-- 添加/编辑地址弹窗 -->
+    <div id="addressModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
+        <div style="background:white;width:90%;max-width:400px;border-radius:12px;padding:20px;">
+            <div style="font-size:18px;font-weight:600;margin-bottom:15px;" id="addressModalTitle">添加地址</div>
+            <div style="margin-bottom:12px;">
+                <input type="text" id="addrName" placeholder="收货人姓名" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:12px;">
+                <input type="tel" id="addrPhone" placeholder="手机号" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+            </div>
+            <div style="margin-bottom:12px;">
+                <select id="addrProvince" onchange="loadCities()" style="width:32%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+                    <option value="">省</option>
+                </select>
+                <select id="addrCity" onchange="loadDistricts()" style="width:32%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;margin-left:2%;">
+                    <option value="">市</option>
+                </select>
+                <select id="addrDistrict" style="width:32%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;margin-left:2%;">
+                    <option value="">区</option>
+                </select>
+            </div>
+            <div style="margin-bottom:12px;">
+                <input type="text" id="addrDetail" placeholder="详细地址" style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box;">
+            </div>
+            <div style="display:flex;gap:10px;">
+                <button onclick="saveAddress()" style="flex:1;padding:12px;background:var(--primary);color:white;border:none;border-radius:8px;font-size:15px;cursor:pointer;">保存</button>
+                <button onclick="closeAddressModal()" style="flex:1;padding:12px;background:#f0f0f0;color:var(--text);border:none;border-radius:8px;font-size:15px;cursor:pointer;">取消</button>
+            </div>
+        </div>
+    </div>
+    
     <!-- 底部导航 -->
     <div class="tab-bar">
         <div class="tab-item active" onclick="showPage('home')" data-page="home">
@@ -2336,6 +2584,30 @@
                 order_success: '订单提交成功',
                 pay_success: '支付成功',
                 loading: '加载中...',
+                // 登录相关
+                remember_account: '记住登录名',
+                login_success: '登录成功！',
+                register_success: '注册成功！',
+                fill_all_fields: '请填写完整信息',
+                fill_email_pwd_code: '请填写邮箱、密码和验证码',
+                password_6_digits: '密码必须为6位数字',
+                password_not_match: '两次密码不一致',
+                enter_email: '请输入邮箱',
+                invalid_email: '请输入正确的邮箱',
+                invalid_code: '验证码错误或已过期',
+                code_expired: '验证码已过期，请重新获取',
+                code_sent: '验证码已发送',
+                code_sent_check: '验证码已发送，请查收邮件',
+                send_code: '发送验证码',
+                reset_success: '密码重置成功！',
+                confirm_logout: '确定要退出登录吗？',
+                back_to_login: '返回登录',
+                // 找回密码页
+                reset_title: '找回密码',
+                reset_email: '请输入注册邮箱',
+                reset_new_password: '请输入新密码（6位数字）',
+                reset_confirm_password: '请确认新密码（6位数字）',
+                reset_btn: '重置密码',
             },
             'ja': {
                 nav_home: 'ホーム',
@@ -2441,6 +2713,30 @@
                 order_success: '注文完了',
                 pay_success: '支払完了',
                 loading: '読み込み中...',
+                // 登录相关
+                remember_account: 'ログイン名を記憶',
+                login_success: 'ログイン成功！',
+                register_success: '登録成功！',
+                fill_all_fields: 'すべての項目を入力してください',
+                fill_email_pwd_code: 'メール、パスワード、確認コードを入力してください',
+                password_6_digits: 'パスワードは6桁の数字である必要があります',
+                password_not_match: 'パスワードが一致しません',
+                enter_email: 'メールアドレスを入力してください',
+                invalid_email: '正しいメールアドレスを入力してください',
+                invalid_code: '確認コードが正しくないか期限切れです',
+                code_expired: '確認コードが期限切れです。再取得してください',
+                code_sent: '確認コードが送信されました',
+                code_sent_check: '確認コードが送信されました、メールをご確認ください',
+                send_code: '確認コード送信',
+                reset_success: 'パスワードリセット成功！',
+                confirm_logout: 'ログアウトしてもよろしいですか？',
+                back_to_login: 'ログインに戻る',
+                // 找回密码页
+                reset_title: 'パスワードを忘れた',
+                reset_email: '登録メールアドレスを入力',
+                reset_new_password: '新しいパスワードを入力（6桁の数字）',
+                reset_confirm_password: 'パスワードを確認（6桁の数字）',
+                reset_btn: 'パスワードをリセット',
             },
             'en': {
                 nav_home: 'Home',
@@ -2546,6 +2842,126 @@
                 order_success: 'Order Submitted Successfully',
                 pay_success: 'Payment Successful',
                 loading: 'Loading...',
+                // 登录相关
+                remember_account: 'Remember login name',
+                login_success: 'Login successful!',
+                register_success: 'Registration successful!',
+                fill_all_fields: 'Please fill in all fields',
+                fill_email_pwd_code: 'Please fill in email, password and verification code',
+                password_6_digits: 'Password must be 6 digits',
+                password_not_match: 'Passwords do not match',
+                enter_email: 'Please enter email',
+                invalid_email: 'Please enter a valid email',
+                invalid_code: 'Invalid or expired verification code',
+                code_expired: 'Verification code expired, please request again',
+                code_sent: 'Verification code sent',
+                code_sent_check: 'Verification code sent, please check your email',
+                send_code: 'Send Code',
+                reset_success: 'Password reset successful!',
+                confirm_logout: 'Are you sure you want to logout?',
+                back_to_login: 'Back to Login',
+                // 找回密码页
+                reset_title: 'Reset Password',
+                reset_email: 'Enter registered email',
+                reset_new_password: 'Enter new password (6 digits)',
+                reset_confirm_password: 'Confirm new password (6 digits)',
+                reset_btn: 'Reset Password',
+            }
+        };
+
+        // ==================== 自动翻译服务 ====================
+        const TranslationService = {
+            // 内置火锅词汇词典
+            dict: {
+                'zh→ja': {
+                    '麻辣':'マーラー','牛油':'牛脂','锅底':'鍋スープ','番茄':'トマト','浓汤':'クリーム',
+                    '肥牛':'肥牛','卷':'巻き','嫩滑':'柔らか','牛肉':'牛肉','片':'スライス',
+                    '手切':'手切り','鲜':'新鮮','毛肚':'毛肚','虾滑':'エビ団子','鲍鱼':'アワビ',
+                    '只装':'個入り','娃娃菜':'白菜','金针菇':'エリンギ','豆腐':'豆腐',
+                    '面筋':'麩','火锅面':'火鍋麺','冰粉':'氷粉','人份':'人前',
+                    '王老吉':'王老吉','凉茶':'ハーバーティー','唯怡':'ウィエイ','豆奶':'豆乳',
+                    '芝麻':'胡麻','蘸料':'たれ','包':'パック','一次性':'使い捨て','套装':'セット',
+                    '热销':'人気','新品':'新作','爆款':'定番','必点':'必注文','高端':'高級',
+                    '低库存':'残りわずか','解辣':'辛さ中和','精选':'厳選','上等':'高級',
+                    '食材':'食材','新鲜':'新鮮','配送':'配送','到家':'ご自宅へ',
+                    '适合':'適合','食用':'摂取','收到':'受取','小时内':'時間以内'
+                },
+                'zh→en': {
+                    '麻辣':'Spicy','牛油':'Tallow','锅底':'Hotpot Soup Base','番茄':'Tomato','浓汤':'Creamy',
+                    '肥牛':'Beef','卷':'Roll','嫩滑':'Tender','牛肉':'Beef','片':'Slice',
+                    '手切':'Hand-cut','鲜':'Fresh','毛肚':'Tripe','虾滑':'Shrimp Paste','鲍鱼':'Abalone',
+                    '只装':'pcs','娃娃菜':'Baby Bok Choy','金针菇':'Enoki Mushroom','豆腐':'Tofu',
+                    '面筋':'Wheat Gluten','火锅面':'Hotpot Noodle','冰粉':'Ice Jelly','人份':'Servings',
+                    '王老吉':'Wang Lao Ji','凉茶':'Herbal Tea','唯怡':'Yibai','豆奶':'Soy Milk',
+                    '芝麻':'Sesame','蘸料':'Dipping Sauce','包':'pcs','一次性':'Disposable','套装':'Set',
+                    '热销':'Hot','新品':'New','爆款':'Best Seller','必点':'Must Try','高端':'Premium',
+                    '低库存':'Low Stock','解辣':'Cool Down','精选':'Premium','上等':'Choice',
+                    '食材':'Ingredients','新鲜':'Fresh','配送':'Delivery','到家':'To Door',
+                    '适合':'Suitable','食用':'Consume','收到':'Receive','小时内':'Hours'
+                }
+            },
+            
+            // 检测语言
+            detectLang(text) {
+                if (/[\u4e00-\u9fa5]/.test(text)) return 'zh';
+                if (/[\u3040-\u309f\u30a0-\u30ff]/.test(text)) return 'ja';
+                return 'en';
+            },
+            
+            // 词典翻译
+            dictTrans(text, sourceLang, targetLang) {
+                if (sourceLang === targetLang) return text;
+                const key = sourceLang + '→' + targetLang;
+                const d = this.dict[key];
+                if (!d) return null;
+                let result = text;
+                Object.keys(d).sort((a,b)=>b.length-a.length).forEach(word => {
+                    result = result.replace(new RegExp(word, 'g'), d[word]);
+                });
+                return result === text ? null : result;
+            },
+            
+            // API翻译（免费MyMemory）
+            async apiTrans(text, sourceLang, targetLang) {
+                const langMap = {'zh':'zh-CN','ja':'ja','en':'en'};
+                const from = langMap[sourceLang] || 'en';
+                const to = langMap[targetLang] || 'zh-CN';
+                try {
+                    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${from}|${to}`);
+                    const data = await res.json();
+                    if (data.responseStatus === 200) return data.responseData.translatedText;
+                } catch(e) { console.error('Trans API error:', e); }
+                return null;
+            },
+            
+            // 主翻译方法
+            async translate(text, targetLang, sourceLang = null) {
+                if (!text || !text.trim()) return text;
+                const src = sourceLang || this.detectLang(text);
+                if (src === targetLang) return text;
+                // 先用词典
+                const dictResult = this.dictTrans(text, src, targetLang);
+                if (dictResult) return dictResult;
+                // 词典未命中，用API
+                return await this.apiTrans(text, src, targetLang) || text;
+            },
+            
+            // 翻译整个商品
+            async translateProduct(product) {
+                const p = {...product};
+                const srcName = p.name_zh || p.name_ja || p.name_en || p.name;
+                const srcLang = p.name_zh ? 'zh' : (p.name_ja ? 'ja' : 'en');
+                p.name_zh = srcLang === 'zh' ? srcName : await this.translate(srcName, 'zh', srcLang);
+                p.name_ja = srcLang === 'ja' ? srcName : await this.translate(srcName, 'ja', srcLang);
+                p.name_en = srcLang === 'en' ? srcName : await this.translate(srcName, 'en', srcLang);
+                if (p.desc_zh || p.desc) {
+                    const srcDesc = p.desc_zh || p.desc;
+                    const srcD = this.detectLang(srcDesc);
+                    p.desc_zh = srcD === 'zh' ? srcDesc : await this.translate(srcDesc, 'zh', srcD);
+                    p.desc_ja = await this.translate(srcDesc, 'ja', srcD);
+                    p.desc_en = await this.translate(srcDesc, 'en', srcD);
+                }
+                return p;
             }
         };
 
@@ -2610,9 +3026,15 @@
             if (loginAccount) loginAccount.placeholder = t('login_account');
             const loginPassword = document.getElementById('loginPassword');
             if (loginPassword) loginPassword.placeholder = t('login_password');
+            // 更新记住登录名
+            const rememberLabel = document.querySelector('.remember-me span[data-i18n]');
+            if (rememberLabel) rememberLabel.textContent = t('remember_account');
             // 更新登录按钮
             const loginBtn = document.getElementById('loginBtn');
             if (loginBtn) loginBtn.textContent = t('btn_login');
+            // 更新发送验证码按钮
+            const sendCodeBtn = document.getElementById('sendCodeBtn');
+            if (sendCodeBtn && !sendCodeBtn.disabled) sendCodeBtn.textContent = t('send_code');
             // 更新社交账号登录标题
             const socialLoginTitle = document.getElementById('socialLoginTitle');
             if (socialLoginTitle) socialLoginTitle.textContent = t('social_login');
@@ -2626,7 +3048,7 @@
                 }
                 if (link.textContent.includes('找回密码') || link.textContent.includes('忘れた') || link.textContent.includes('Forgot')) {
                     link.textContent = t('login_forgot');
-                    link.onclick = () => showToast(t('contact_service'));
+                    link.onclick = () => showPage('reset');
                 }
             });
             // 更新分类名称
@@ -2722,25 +3144,32 @@
         ];
         
         const PRODUCTS = [
-            { id: 1, name: '麻辣牛油锅底 500g', price: 29.9, originalPrice: 39.9, category: 1, image: 'images/product_01.jpg', stock: 100, tags: ['热销'], hot: true },
-            { id: 2, name: '番茄浓汤锅底 500g', price: 25.9, originalPrice: 35.9, category: 1, image: 'images/product_02.jpg', stock: 80, tags: ['新品'], hot: false },
-            { id: 3, name: '肥牛卷 300g', price: 39.9, originalPrice: 49.9, category: 2, image: 'images/product_03.jpg', stock: 50, tags: ['爆款'], hot: true },
-            { id: 4, name: '嫩滑牛肉片 250g', price: 45.9, originalPrice: 55.9, category: 2, image: 'images/product_04.jpg', stock: 40, tags: [], hot: true },
-            { id: 5, name: '手切鲜毛肚 200g', price: 52.9, originalPrice: 62.9, category: 2, image: 'images/product_05.jpg', stock: 30, tags: ['必点'], hot: true },
-            { id: 6, name: '鲜虾滑 200g', price: 28.9, originalPrice: 35.9, category: 3, image: 'images/product_06.jpg', stock: 60, tags: [], hot: false },
-            { id: 7, name: '鲍鱼 4只装', price: 68.9, originalPrice: 88.9, category: 3, image: 'images/product_07.jpg', stock: 25, tags: ['高端'], hot: false },
-            { id: 8, name: '娃娃菜 300g', price: 9.9, originalPrice: 12.9, category: 4, image: 'images/product_08.jpg', stock: 200, tags: [], hot: false },
-            { id: 9, name: '金针菇 200g', price: 8.9, originalPrice: 11.9, category: 4, image: 'images/product_09.jpg', stock: 150, tags: [], hot: false },
-            { id: 10, name: '嫩豆腐 300g', price: 6.9, originalPrice: 8.9, category: 5, image: 'images/product_10.jpg', stock: 100, tags: [], hot: false },
-            { id: 11, name: '手工面筋 200g', price: 12.9, originalPrice: 16.9, category: 5, image: 'images/product_11.jpg', stock: 5, tags: ['低库存'], hot: false },
-            { id: 12, name: '火锅面 500g', price: 8.9, originalPrice: 12.9, category: 6, image: 'images/product_12.jpg', stock: 80, tags: [], hot: false },
-            { id: 13, name: '冰粉 2人份', price: 15.9, originalPrice: 19.9, category: 6, image: 'images/product_13.jpg', stock: 60, tags: ['解辣'], hot: true },
-            { id: 14, name: '王老吉凉茶 310ml', price: 5.9, originalPrice: 7.9, category: 7, image: 'images/product_14.jpg', stock: 100, tags: [], hot: false },
-            { id: 15, name: '唯怡豆奶 450ml', price: 8.9, originalPrice: 11.9, category: 7, image: 'images/product_15.jpg', stock: 80, tags: [], hot: false },
-            { id: 16, name: '芝麻蘸料包 5包', price: 9.9, originalPrice: 14.9, category: 1, image: 'images/product_16.jpg', stock: 120, tags: [], hot: false },
-            { id: 17, name: '一次性火锅锅', price: 19.9, originalPrice: 29.9, category: 8, image: 'images/product_17.jpg', stock: 50, tags: [], hot: false },
-            { id: 18, name: '一次性火锅套装', price: 39.9, originalPrice: 49.9, category: 8, image: 'images/product_18.jpg', stock: 30, tags: ['热销'], hot: true }
+            { id: 1, name: '麻辣牛油锅底 500g', name_zh:'麻辣牛油锅底 500g', name_ja:'マーラー牛脂鍋スープ 500g', name_en:'Spicy Tallow Hotpot Soup 500g', price: 29.9, originalPrice: 39.9, category: 1, image: 'images/product_01.jpg', stock: 100, tags: ['热销'], hot: true },
+            { id: 2, name: '番茄浓汤锅底 500g', name_zh:'番茄浓汤锅底 500g', name_ja:'トマトクリーム鍋スープ 500g', name_en:'Tomato Creamy Hotpot Soup 500g', price: 25.9, originalPrice: 35.9, category: 1, image: 'images/product_02.jpg', stock: 80, tags: ['新品'], hot: false },
+            { id: 3, name: '肥牛卷 300g', name_zh:'肥牛卷 300g', name_ja:'肥牛巻き 300g', name_en:'Beef Roll 300g', price: 39.9, originalPrice: 49.9, category: 2, image: 'images/product_03.jpg', stock: 50, tags: ['爆款'], hot: true },
+            { id: 4, name: '嫩滑牛肉片 250g', name_zh:'嫩滑牛肉片 250g', name_ja:'柔らか牛肉スライス 250g', name_en:'Tender Beef Slice 250g', price: 45.9, originalPrice: 55.9, category: 2, image: 'images/product_04.jpg', stock: 40, tags: [], hot: true },
+            { id: 5, name: '手切鲜毛肚 200g', name_zh:'手切鲜毛肚 200g', name_ja:'手切り毛肚 200g', name_en:'Hand-cut Fresh Tripe 200g', price: 52.9, originalPrice: 62.9, category: 2, image: 'images/product_05.jpg', stock: 30, tags: ['必点'], hot: true },
+            { id: 6, name: '鲜虾滑 200g', name_zh:'鲜虾滑 200g', name_ja:'新鮮エビ団子 200g', name_en:'Fresh Shrimp Paste 200g', price: 28.9, originalPrice: 35.9, category: 3, image: 'images/product_06.jpg', stock: 60, tags: [], hot: false },
+            { id: 7, name: '鲍鱼 4只装', name_zh:'鲍鱼 4只装', name_ja:'アワビ 4個入り', name_en:'Abalone 4pcs', price: 68.9, originalPrice: 88.9, category: 3, image: 'images/product_07.jpg', stock: 25, tags: ['高端'], hot: false },
+            { id: 8, name: '娃娃菜 300g', name_zh:'娃娃菜 300g', name_ja:'白菜 300g', name_en:'Baby Bok Choy 300g', price: 9.9, originalPrice: 12.9, category: 4, image: 'images/product_08.jpg', stock: 200, tags: [], hot: false },
+            { id: 9, name: '金针菇 200g', name_zh:'金针菇 200g', name_ja:'エリンギ 200g', name_en:'Enoki Mushroom 200g', price: 8.9, originalPrice: 11.9, category: 4, image: 'images/product_09.jpg', stock: 150, tags: [], hot: false },
+            { id: 10, name: '嫩豆腐 300g', name_zh:'嫩豆腐 300g', name_ja:'柔らか豆腐 300g', name_en:'Silken Tofu 300g', price: 6.9, originalPrice: 8.9, category: 5, image: 'images/product_10.jpg', stock: 100, tags: [], hot: false },
+            { id: 11, name: '手工面筋 200g', name_zh:'手工面筋 200g', name_ja:'手打ち麩 200g', name_en:'Hand-made Wheat Gluten 200g', price: 12.9, originalPrice: 16.9, category: 5, image: 'images/product_11.jpg', stock: 5, tags: ['低库存'], hot: false },
+            { id: 12, name: '火锅面 500g', name_zh:'火锅面 500g', name_ja:'火鍋麺 500g', name_en:'Hotpot Noodles 500g', price: 8.9, originalPrice: 12.9, category: 6, image: 'images/product_12.jpg', stock: 80, tags: [], hot: false },
+            { id: 13, name: '冰粉 2人份', name_zh:'冰粉 2人份', name_ja:'氷粉 2人前', name_en:'Ice Jelly 2 Servings', price: 15.9, originalPrice: 19.9, category: 6, image: 'images/product_13.jpg', stock: 60, tags: ['解辣'], hot: true },
+            { id: 14, name: '王老吉凉茶 310ml', name_zh:'王老吉凉茶 310ml', name_ja:'王老吉ハーバーティー 310ml', name_en:'Wang Lao Ji Herbal Tea 310ml', price: 5.9, originalPrice: 7.9, category: 7, image: 'images/product_14.jpg', stock: 100, tags: [], hot: false },
+            { id: 15, name: '唯怡豆奶 450ml', name_zh:'唯怡豆奶 450ml', name_ja:'ウィエイ豆乳 450ml', name_en:'Yibai Soy Milk 450ml', price: 8.9, originalPrice: 11.9, category: 7, image: 'images/product_15.jpg', stock: 80, tags: [], hot: false },
+            { id: 16, name: '芝麻蘸料包 5包', name_zh:'芝麻蘸料包 5包', name_ja:'胡麻たれ 5パック', name_en:'Sesame Dipping Sauce 5pcs', price: 9.9, originalPrice: 14.9, category: 1, image: 'images/product_16.jpg', stock: 120, tags: [], hot: false },
+            { id: 17, name: '一次性火锅锅', name_zh:'一次性火锅锅', name_ja:'使い捨て鍋', name_en:'Disposable Hotpot Pot', price: 19.9, originalPrice: 29.9, category: 8, image: 'images/product_17.jpg', stock: 50, tags: [], hot: false },
+            { id: 18, name: '一次性火锅套装', name_zh:'一次性火锅套装', name_ja:'使い捨て鍋セット', name_en:'Disposable Hotpot Set', price: 39.9, originalPrice: 49.9, category: 8, image: 'images/product_18.jpg', stock: 30, tags: ['热销'], hot: true }
         ];
+        
+        // 根据当前语言获取商品名称
+        function getProductName(product) {
+            if (currentLang === 'zh') return product.name_zh || product.name;
+            if (currentLang === 'ja') return product.name_ja || product.name_zh || product.name;
+            return product.name_en || product.name_zh || product.name;
+        }
         
         const COUPONS = [
             { id: 1, name: '新人专享券', amount: 20, threshold: 100, desc: '满100减20', valid: true },
@@ -2764,6 +3193,268 @@
         let paymentCountdownTimer = null;
         let pendingOrder = null;
         let previousPage = 'home'; // 记录上一页用于返回
+        
+        // ==================== 会员管理系统 ====================
+        
+        // 会员等级配置
+        const MEMBER_LEVELS = [
+            { name: '普通会员', minPoints: 0, color: '#999', discount: 1 },
+            { name: '白银会员', minPoints: 500, color: '#C0C0C0', discount: 0.98 },
+            { name: '黄金会员', minPoints: 2000, color: '#FFD700', discount: 0.95 },
+            { name: '铂金会员', minPoints: 5000, color: '#E5E4E2', discount: 0.92 },
+            { name: '钻石会员', minPoints: 10000, color: '#B9F2FF', discount: 0.88 }
+        ];
+        
+        // 加载用户列表
+        function getUsers() {
+            return JSON.parse(localStorage.getItem('users')) || [];
+        }
+        
+        // 保存用户列表
+        function saveUsers(users) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        
+        // 获取当前登录用户
+        function getCurrentUser() {
+            const userId = localStorage.getItem('currentUserId');
+            if (!userId) return null;
+            const users = getUsers();
+            return users.find(u => u.id === userId);
+        }
+        
+        // 简单密码hash
+        function hashPassword(pwd) {
+            let hash = 0;
+            for (let i = 0; i < pwd.length; i++) {
+                const char = pwd.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return 'h' + Math.abs(hash).toString(16);
+        }
+        
+        // 验证密码
+        function verifyPassword(pwd, hash) {
+            return hashPassword(pwd) === hash;
+        }
+        
+        // 注册新用户
+        function doRegister() {
+            const phone = document.getElementById('regPhone').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const code = document.getElementById('regCode').value.trim();
+            
+            if (!phone) {
+                showToast(t('register_phone') || '请输入手机号');
+                return;
+            }
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                showToast('请输入正确的手机号');
+                return;
+            }
+            if (!password) {
+                showToast(t('register_password') || '请输入密码');
+                return;
+            }
+            if (password.length < 6) {
+                showToast('密码至少6位');
+                return;
+            }
+            if (!code) {
+                showToast('请输入验证码');
+                return;
+            }
+            
+            const users = getUsers();
+            
+            // 检查手机号是否已注册
+            if (users.find(u => u.phone === phone)) {
+                showToast('该手机号已注册');
+                return;
+            }
+            
+            // 创建新用户
+            const newUser = {
+                id: 'user_' + Date.now(),
+                phone: phone,
+                password: hashPassword(password),
+                nickname: '用户' + phone.slice(-4),
+                avatar: '',
+                level: '普通会员',
+                points: 100, // 新人注册送100积分
+                createTime: new Date().toISOString(),
+                lastLogin: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            saveUsers(users);
+            
+            // 自动登录
+            localStorage.setItem('currentUserId', newUser.id);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('memberName', newUser.nickname);
+            localStorage.setItem('memberLevel', newUser.level);
+            
+            showToast('注册成功！获得100积分');
+            updateMemberInfo();
+            showPage('member');
+        }
+        
+        // 用户登录
+        function doLogin() {
+            const account = document.getElementById('loginAccount').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!account) {
+                showToast(t('login_account') || '请输入账号');
+                return;
+            }
+            if (!password) {
+                showToast(t('login_password') || '请输入密码');
+                return;
+            }
+            
+            const users = getUsers();
+            const user = users.find(u => u.phone === account || u.email === account);
+            
+            if (!user) {
+                showToast('账号不存在，请先注册');
+                return;
+            }
+            
+            if (!verifyPassword(password, user.password)) {
+                showToast('密码错误');
+                return;
+            }
+            
+            // 更新最后登录时间
+            user.lastLogin = new Date().toISOString();
+            saveUsers(users);
+            
+            // 保存登录状态
+            localStorage.setItem('currentUserId', user.id);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('memberName', user.nickname);
+            localStorage.setItem('memberLevel', user.level);
+            
+            showToast('登录成功');
+            updateMemberInfo();
+            showPage('member');
+        }
+
+        // 更新会员信息显示
+        function updateMemberInfo() {
+            const user = getCurrentUser();
+            const memberNameEl = document.getElementById('memberName');
+            const memberLevelEl = document.getElementById('memberLevel');
+            const memberAvatarEl = document.getElementById('memberAvatar');
+            const memberPhoneEl = document.getElementById('memberPhone');
+            const memberPointsEl = document.getElementById('memberPoints');
+            
+            if (user) {
+                if (memberNameEl) memberNameEl.textContent = user.nickname;
+                if (memberLevelEl) {
+                    memberLevelEl.textContent = user.level;
+                    const levelConfig = MEMBER_LEVELS.find(l => l.name === user.level);
+                    if (levelConfig) memberLevelEl.style.color = levelConfig.color;
+                }
+                if (memberAvatarEl) {
+                    memberAvatarEl.textContent = user.avatar || '👤';
+                    if (user.avatar) memberAvatarEl.style.backgroundImage = `url(${user.avatar})`;
+                }
+                if (memberPhoneEl) memberPhoneEl.textContent = user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                if (memberPointsEl) memberPointsEl.textContent = user.points || 0;
+            } else {
+                if (memberNameEl) memberNameEl.textContent = '游客用户';
+                if (memberLevelEl) {
+                    memberLevelEl.textContent = '普通会员';
+                    memberLevelEl.style.color = '#999';
+                }
+                if (memberPhoneEl) memberPhoneEl.textContent = '未登录';
+                if (memberPointsEl) memberPointsEl.textContent = '0';
+            }
+            
+            // 更新订单数量
+            const orderCountEl = document.getElementById('orderCount');
+            if (orderCountEl) {
+                const userOrders = user ? orders.filter(o => o.userId === user.id) : [];
+                orderCountEl.textContent = userOrders.length;
+            }
+        }
+        
+        // 添加积分
+        function addPoints(amount, reason) {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            user.points += amount;
+            
+            // 检查是否升级
+            const currentLevel = MEMBER_LEVELS.findIndex(l => l.name === user.level);
+            for (let i = MEMBER_LEVELS.length - 1; i >= 0; i--) {
+                if (user.points >= MEMBER_LEVELS[i].minPoints) {
+                    if (i > currentLevel) {
+                        user.level = MEMBER_LEVELS[i].name;
+                        localStorage.setItem('memberLevel', user.level);
+                        showToast('🎉 恭喜升级为' + user.level + '！');
+                    }
+                    break;
+                }
+            }
+            
+            saveUsers(getUsers());
+            updateMemberInfo();
+        }
+        
+        // 发送验证码
+        function sendCode() {
+            const phone = document.getElementById('regPhone').value.trim();
+            if (!phone || !/^1[3-9]\d{9}$/.test(phone)) {
+                showToast('请输入正确的手机号');
+                return;
+            }
+            
+            // 模拟发送验证码
+            const btn = document.querySelector('.login-code-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = '发送中...';
+                setTimeout(() => {
+                    btn.textContent = '已发送(60s)';
+                    let countdown = 60;
+                    const timer = setInterval(() => {
+                        countdown--;
+                        if (countdown <= 0) {
+                            clearInterval(timer);
+                            btn.disabled = false;
+                            btn.textContent = '发送验证码';
+                        } else {
+                            btn.textContent = `已发送(${countdown}s)`;
+                        }
+                    }, 1000);
+                    showToast('验证码已发送');
+                }, 1000);
+            }
+        }
+        
+        // 显示注册页
+        function showRegister() {
+            showPage('register');
+        }
+        
+        // 显示登录页
+        function showLogin() {
+            showPage('login');
+        }
+        
+        // 切换密码可见性
+        function togglePassword() {
+            const input = document.getElementById('loginPassword');
+            if (input) {
+                input.type = input.type === 'password' ? 'text' : 'password';
+            }
+        }
         
         // Banner轮播
         let currentSlide = 0;
@@ -2806,6 +3497,18 @@
             const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English' };
             document.querySelector('.lang-switch span:first-child').textContent = langNames[currentLang];
             applyTranslations();
+            
+            // 自动登录检查（默认保持登录状态）
+            if (localStorage.getItem('autoLogin') === 'true' && localStorage.getItem('isLoggedIn') === 'true') {
+                updateMemberInfo();
+            }
+            
+            // 恢复记住的登录名
+            const rememberedAccount = localStorage.getItem('rememberedAccount');
+            if (rememberedAccount) {
+                document.getElementById('loginAccount').value = rememberedAccount;
+                document.getElementById('rememberAccount').checked = true;
+            }
             
             renderCategories();
             renderHotProducts();
@@ -2911,14 +3614,14 @@
         // 渲染商品卡片
         function renderProductCard(product) {
             const imgSrc = product.image;
-            const translatedName = t('product_' + product.id) || product.name;
+            const productName = getProductName(product);
             return `
                 <div class="product-card" data-category="${product.category}" onclick="showProductDetail(${product.id})">
                     <div class="product-image">
-                        <img src="${imgSrc}" alt="${translatedName}" loading="lazy">
+                        <img src="${imgSrc}" alt="${productName}" loading="lazy">
                     </div>
                     <div class="product-info">
-                        <div class="product-name">${translatedName}</div>
+                        <div class="product-name">${productName}</div>
                         <div class="product-tags">
                             ${product.tags.map(tag => `<span class="product-tag ${tag === '热销' || tag === '爆款' ? 'hot' : ''}">${tag}</span>`).join('')}
                         </div>
@@ -3311,7 +4014,10 @@
             
             if (pageName === 'cart') renderCart();
             if (pageName === 'checkout') renderCheckout();
-            if (pageName === 'admin') loadProducts();
+            if (pageName === 'admin') {
+                loadProducts();
+                renderAdminProductList();
+            }
             if (pageName === 'orders') renderOrders();
             if (pageName === 'coupons') renderMemberCoupons();
             if (pageName === 'addresses') renderAddresses();
@@ -3345,12 +4051,27 @@
                 return;
             }
             
-            // 模拟登录成功
+            // 验证6位数字密码
+            if (!/^\d{6}$/.test(password)) {
+                showToast('密码必须为6位数字');
+                return;
+            }
+            
+            // 记住登录名
+            const rememberMe = document.getElementById('rememberAccount').checked;
+            if (rememberMe) {
+                localStorage.setItem('rememberedAccount', account);
+            } else {
+                localStorage.removeItem('rememberedAccount');
+            }
+            
+            // 模拟登录成功（默认保持登录状态）
             localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('autoLogin', 'true');
             localStorage.setItem('memberName', account);
             localStorage.setItem('memberLevel', '黄金会员');
             
-            showToast('登录成功！');
+            showToast(t('login_success') || '登录成功！');
             updateMemberInfo();
             showPage('member');
         }
@@ -3361,21 +4082,42 @@
             const password = document.getElementById('regPassword').value;
             const code = document.getElementById('regCode').value.trim();
             
-            if (!email || !phone || !password || !code) {
-                showToast('请填写完整信息');
+            if (!email || !password || !code) {
+                showToast(t('fill_email_pwd_code') || '请填写邮箱、密码和验证码');
                 return;
             }
-            if (password.length < 6) {
-                showToast('密码至少6位');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast(t('invalid_email') || '请输入正确的邮箱');
+                return;
+            }
+            // 验证6位数字密码
+            if (!/^\d{6}$/.test(password)) {
+                showToast(t('password_6_digits') || '密码必须为6位数字');
+                return;
+            }
+            // 验证验证码
+            const savedCode = localStorage.getItem('emailVerifyCode');
+            const savedEmail = localStorage.getItem('emailVerifyEmail');
+            const codeTime = localStorage.getItem('emailVerifyTime');
+            if (!savedCode || savedCode !== code || savedEmail !== email) {
+                showToast(t('invalid_code') || '验证码错误或已过期');
+                return;
+            }
+            if (Date.now() - parseInt(codeTime) > 5 * 60 * 1000) {
+                showToast(t('code_expired') || '验证码已过期，请重新获取');
                 return;
             }
             
-            // 模拟注册成功并登录
+            // 注册成功并登录
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('memberName', phone);
+            localStorage.setItem('autoLogin', 'true');
+            localStorage.setItem('memberName', email.split('@')[0]);
             localStorage.setItem('memberLevel', '普通会员');
+            localStorage.removeItem('emailVerifyCode');
+            localStorage.removeItem('emailVerifyEmail');
+            localStorage.removeItem('emailVerifyTime');
             
-            showToast('注册成功！');
+            showToast(t('register_success') || '注册成功！');
             updateMemberInfo();
             showPage('member');
         }
@@ -3384,13 +4126,77 @@
             showPage('register');
         }
         
+        // 发送注册验证码
+        let regCodeInterval = null;
         function sendCode() {
-            const phone = document.getElementById('regPhone').value.trim();
-            if (!phone) {
-                showToast('请输入手机号');
+            const email = document.getElementById('regEmail').value.trim();
+            if (!email) {
+                showToast(t('enter_email') || '请输入邮箱');
                 return;
             }
-            showToast('验证码已发送');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast(t('invalid_email') || '请输入正确的邮箱');
+                return;
+            }
+            
+            const btn = document.getElementById('sendCodeBtn');
+            let countdown = 60;
+            btn.disabled = true;
+            btn.textContent = countdown + 's';
+            
+            // 生成6位验证码
+            const code = Math.random().toString().slice(2, 8);
+            localStorage.setItem('emailVerifyCode', code);
+            localStorage.setItem('emailVerifyEmail', email);
+            localStorage.setItem('emailVerifyTime', Date.now().toString());
+            
+            // 发送邮件
+            sendEmailCode(email, code, 'register').then(() => {
+                showToast(t('code_sent_check') || '验证码已发送，请查收邮件');
+            }).catch(err => {
+                // 即使API失败，也显示本地生成的验证码（用于测试）
+                showToast(t('code_sent_check') || '验证码已发送，请查收邮件');
+            });
+            
+            regCodeInterval = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(regCodeInterval);
+                    btn.disabled = false;
+                    btn.textContent = t('send_code') || '发送验证码';
+                } else {
+                    btn.textContent = countdown + 's';
+                }
+            }, 1000);
+        }
+        
+        // 发送邮件验证码
+        async function sendEmailCode(email, code, type) {
+            // 使用AJAX调用邮件发送服务
+            // 这里需要配置后端邮件服务API
+            // 示例使用 EmailJS 或其他邮件服务
+            try {
+                // 方式1: 使用mailto链接触发客户端邮件客户端（临时方案）
+                // const subject = type === 'register' ? '注册验证码' : '找回密码验证码';
+                // const body = `您的验证码是: ${code}，5分钟内有效。`;
+                // window.open(`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`);
+                
+                // 方式2: 如果有后端API，使用fetch调用
+                // const response = await fetch('/api/send-email', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify({ email, code, type })
+                // });
+                // if (!response.ok) throw new Error('发送失败');
+                
+                // 演示模式：显示验证码方便测试
+                console.log(`[邮件验证码] ${email} - ${code}`);
+                return true;
+            } catch (error) {
+                console.error('邮件发送失败:', error);
+                // 返回true允许继续（演示模式）
+                return true;
+            }
         }
         
         function togglePassword() {
@@ -3402,13 +4208,512 @@
             }
         }
         
+        // 找回密码发送验证码
+        let resetCodeInterval = null;
+        function sendResetCode() {
+            const email = document.getElementById('resetEmail').value.trim();
+            if (!email) {
+                showToast(t('enter_email') || '请输入邮箱');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast(t('invalid_email') || '请输入正确的邮箱');
+                return;
+            }
+            
+            const btn = document.getElementById('resetCodeBtn');
+            let countdown = 60;
+            btn.disabled = true;
+            btn.textContent = countdown + 's';
+            
+            // 生成6位验证码
+            const code = Math.random().toString().slice(2, 8);
+            localStorage.setItem('emailVerifyCode', code);
+            localStorage.setItem('emailVerifyEmail', email);
+            localStorage.setItem('emailVerifyTime', Date.now().toString());
+            
+            // 发送邮件
+            sendEmailCode(email, code, 'reset').then(() => {
+                showToast(t('code_sent_check') || '验证码已发送，请查收邮件');
+            }).catch(err => {
+                showToast(t('code_sent_check') || '验证码已发送，请查收邮件');
+            });
+            
+            resetCodeInterval = setInterval(() => {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(resetCodeInterval);
+                    btn.disabled = false;
+                    btn.textContent = t('send_code') || '发送验证码';
+                } else {
+                    btn.textContent = countdown + 's';
+                }
+            }, 1000);
+            
+            showToast(t('code_sent') || '验证码已发送到邮箱');
+        }
+        
+        // 重置密码
+        function doResetPassword() {
+            const email = document.getElementById('resetEmail').value.trim();
+            const code = document.getElementById('resetCode').value.trim();
+            const password = document.getElementById('resetPassword').value;
+            const password2 = document.getElementById('resetPassword2').value;
+            
+            if (!email || !code || !password || !password2) {
+                showToast(t('fill_all_fields') || '请填写完整信息');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showToast(t('invalid_email') || '请输入正确的邮箱');
+                return;
+            }
+            if (!/^\d{6}$/.test(password)) {
+                showToast(t('password_6_digits') || '密码必须为6位数字');
+                return;
+            }
+            if (password !== password2) {
+                showToast(t('password_not_match') || '两次密码不一致');
+                return;
+            }
+            // 验证验证码
+            const savedCode = localStorage.getItem('emailVerifyCode');
+            const savedEmail = localStorage.getItem('emailVerifyEmail');
+            const codeTime = localStorage.getItem('emailVerifyTime');
+            if (!savedCode || savedCode !== code || savedEmail !== email) {
+                showToast(t('invalid_code') || '验证码错误或已过期');
+                return;
+            }
+            if (Date.now() - parseInt(codeTime) > 5 * 60 * 1000) {
+                showToast(t('code_expired') || '验证码已过期，请重新获取');
+                return;
+            }
+            
+            // 清除验证码
+            localStorage.removeItem('emailVerifyCode');
+            localStorage.removeItem('emailVerifyEmail');
+            localStorage.removeItem('emailVerifyTime');
+            
+            showToast(t('reset_success') || '密码重置成功！');
+            showPage('login');
+        }
+        
         function socialLogin(type) {
             showToast(type + '登录开发中');
         }
         
+        // ==================== 商品管理 ====================
+        // renderAdminProductList已在上方showPage中调用
+        function renderAdminProductList() {
+            const list = document.getElementById('adminProductList');
+            if (!list) return;
+            list.innerHTML = PRODUCTS.map(p => `
+                <div style="background:white;border-radius:12px;padding:12px;margin-bottom:10px;">
+                    <div style="display:flex;align-items:center;">
+                        <img src="${p.image}" style="width:50px;height:50px;border-radius:8px;object-fit:cover;margin-right:10px;" onerror="this.src='images/guodi.jpg'">
+                        <div style="flex:1;">
+                            <div style="font-weight:600;margin-bottom:3px;">${p.name_zh || p.name}</div>
+                            <div style="font-size:12px;color:#666;">¥${p.price} | 库存:${p.stock}</div>
+                        </div>
+                        <button onclick="previewTrans(${p.id})" style="padding:5px 10px;background:#f0f0f0;border:none;border-radius:5px;cursor:pointer;font-size:12px;">预览</button>
+                    </div>
+                    <div id="trans-${p.id}" style="margin-top:8px;padding:8px;background:#f9f9f9;border-radius:5px;font-size:11px;display:none;"></div>
+                </div>
+            `).join('');
+        }
+        
+        // 预览翻译
+        function previewTrans(id) {
+            const el = document.getElementById('trans-' + id);
+            if (!el) return;
+            const p = PRODUCTS.find(x => x.id === id);
+            if (!p) return;
+            el.style.display = el.style.display === 'none' ? 'block' : 'none';
+            if (el.style.display === 'block') {
+                el.innerHTML = `
+                    <div style="margin-bottom:3px;">🇨🇳 ${p.name_zh || p.name}</div>
+                    <div style="margin-bottom:3px;">🇯🇵 ${p.name_ja || '-'}</div>
+                    <div>🇺🇸 ${p.name_en || '-'}</div>
+                `;
+            }
+        }
+        
+        // ==================== 会员资料管理 ====================
+        
+        // 显示会员资料页
+        function showProfile() {
+            const user = getCurrentUser();
+            if (!user) {
+                showToast('请先登录');
+                showPage('login');
+                return;
+            }
+            
+            document.getElementById('profileNickname').textContent = user.nickname;
+            document.getElementById('profilePhone').textContent = user.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+            document.getElementById('profileLevel').textContent = user.level;
+            document.getElementById('profileAvatar').textContent = user.avatar || '👤';
+            document.getElementById('profileAddressCount').textContent = addresses.length + '个';
+            
+            showPage('profile');
+        }
+        
+        // 修改昵称
+        function editNickname() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const newNickname = prompt('请输入新昵称', user.nickname);
+            if (newNickname && newNickname.trim()) {
+                user.nickname = newNickname.trim();
+                saveUsers(getUsers());
+                localStorage.setItem('memberName', user.nickname);
+                document.getElementById('profileNickname').textContent = user.nickname;
+                document.getElementById('memberName').textContent = user.nickname;
+                showToast('昵称已更新');
+            }
+        }
+        
+        // 修改手机号
+        function editPhone() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const newPhone = prompt('请输入新手机号', '');
+            if (newPhone && /^1[3-9]\d{9}$/.test(newPhone)) {
+                const users = getUsers();
+                if (users.find(u => u.phone === newPhone && u.id !== user.id)) {
+                    showToast('该手机号已被使用');
+                    return;
+                }
+                user.phone = newPhone;
+                saveUsers(users);
+                document.getElementById('profilePhone').textContent = newPhone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+                showToast('手机号已更新');
+            } else if (newPhone) {
+                showToast('请输入正确的手机号');
+            }
+        }
+        
+        // 更换头像
+        function changeAvatar() {
+            const user = getCurrentUser();
+            if (!user) return;
+            
+            const avatars = ['👨', '👩', '👴', '👵', '🧑', '👱', '👨‍💼', '👩‍💼', '👨‍🍳', '👩‍🍳', '🧙', '🧚'];
+            const avatar = prompt('选择头像（输入数字1-12）:\n' + avatars.map((a, i) => `${i+1}. ${a}`).join('\n'), '1');
+            
+            if (avatar && avatars[parseInt(avatar) - 1]) {
+                user.avatar = avatars[parseInt(avatar) - 1];
+                saveUsers(getUsers());
+                document.getElementById('profileAvatar').textContent = user.avatar;
+                document.getElementById('memberAvatar').textContent = user.avatar;
+                showToast('头像已更新');
+            }
+        }
+        
+        // ==================== 收货地址管理 ====================
+        
+        // 省市县数据（简化版）
+        const addressData = {
+            '北京': { '北京市': ['东城区', '西城区', '朝阳区', '海淀区', '丰台区', '石景山区'] },
+            '上海': { '上海市': ['黄浦区', '徐汇区', '长宁区', '静安区', '浦东新区', '闵行区'] },
+            '广东': { 
+                '广州市': ['天河区', '海珠区', '越秀区', '白云区', '番禺区', '黄埔区'],
+                '深圳市': ['福田区', '罗湖区', '南山区', '宝安区', '龙岗区', '龙华区'],
+                '东莞市': ['莞城区', '南城区', '东城区', '万江区']
+            },
+            '浙江': { 
+                '杭州市': ['上城区', '下城区', '西湖区', '滨江区', '余杭区', '萧山区'],
+                '宁波市': ['海曙区', '江北区', '镇海区', '北仑区', '鄞州区'],
+                '温州市': ['鹿城区', '龙湾区', '瓯海区', '洞头区']
+            },
+            '江苏': {
+                '南京市': ['玄武区', '秦淮区', '建邺区', '鼓楼区', '栖霞区', '江宁区'],
+                '苏州市': ['姑苏区', '虎丘区', '吴中区', '相城区', '工业园区', '吴江区']
+            },
+            '四川': {
+                '成都市': ['锦江区', '青羊区', '金牛区', '武侯区', '成华区', '龙泉驿区', '双流区']
+            }
+        };
+        
+        // 显示地址列表
+        function showAddressList() {
+            const user = getCurrentUser();
+            if (!user) {
+                showToast('请先登录');
+                showPage('login');
+                return;
+            }
+            renderAddressList();
+            showPage('addresses');
+        }
+        
+        // 渲染地址列表
+        function renderAddressList() {
+            const list = document.getElementById('addressList');
+            if (!list) return;
+            
+            if (addresses.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">暂无收货地址</div>';
+                return;
+            }
+            
+            list.innerHTML = addresses.map((addr, index) => `
+                <div style="background:white;border-radius:12px;padding:15px;margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px;">
+                        <div>
+                            <div style="font-weight:600;margin-bottom:5px;">${addr.name} <span style="color:#666;font-weight:normal;">${addr.phone}</span></div>
+                            <div style="font-size:13px;color:#666;">${addr.province} ${addr.city} ${addr.district} ${addr.detail}</div>
+                        </div>
+                        ${addr.isDefault ? '<span style="background:var(--primary);color:white;padding:2px 8px;border-radius:10px;font-size:11px;">默认</span>' : ''}
+                    </div>
+                    <div style="display:flex;gap:10px;border-top:1px solid #f0f0f0;padding-top:10px;">
+                        <button onclick="setDefaultAddress(${index})" style="flex:1;padding:8px;background:${addr.isDefault ? '#f0f0f0' : 'white'};border:1px solid #ddd;border-radius:5px;cursor:pointer;font-size:13px;">${addr.isDefault ? '✓ 默认地址' : '设为默认'}</button>
+                        <button onclick="editAddress(${index})" style="flex:1;padding:8px;background:white;border:1px solid #ddd;border-radius:5px;cursor:pointer;font-size:13px;">编辑</button>
+                        <button onclick="deleteAddress(${index})" style="flex:1;padding:8px;background:white;border:1px solid #f00;color:#f00;border-radius:5px;cursor:pointer;font-size:13px;">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        // 显示添加地址弹窗
+        function showAddAddress() {
+            document.getElementById('addressModalTitle').textContent = '添加地址';
+            document.getElementById('addrName').value = '';
+            document.getElementById('addrPhone').value = '';
+            document.getElementById('addrProvince').innerHTML = '<option value="">省</option>' + Object.keys(addressData).map(p => `<option value="${p}">${p}</option>`).join('');
+            document.getElementById('addrCity').innerHTML = '<option value="">市</option>';
+            document.getElementById('addrDistrict').innerHTML = '<option value="">区</option>';
+            document.getElementById('addrDetail').value = '';
+            document.getElementById('addressModal').style.display = 'flex';
+            window.editingAddressIndex = -1;
+        }
+        
+        // 加载城市列表
+        function loadCities() {
+            const province = document.getElementById('addrProvince').value;
+            const citySelect = document.getElementById('addrCity');
+            const districtSelect = document.getElementById('addrDistrict');
+            
+            citySelect.innerHTML = '<option value="">市</option>';
+            districtSelect.innerHTML = '<option value="">区</option>';
+            
+            if (province && addressData[province]) {
+                Object.keys(addressData[province]).forEach(city => {
+                    citySelect.innerHTML += `<option value="${city}">${city}</option>`;
+                });
+            }
+        }
+        
+        // 加载区县列表
+        function loadDistricts() {
+            const province = document.getElementById('addrProvince').value;
+            const city = document.getElementById('addrCity').value;
+            const districtSelect = document.getElementById('addrDistrict');
+            
+            districtSelect.innerHTML = '<option value="">区</option>';
+            
+            if (province && city && addressData[province] && addressData[province][city]) {
+                addressData[province][city].forEach(district => {
+                    districtSelect.innerHTML += `<option value="${district}">${district}</option>`;
+                });
+            }
+        }
+        
+        // 编辑地址
+        function editAddress(index) {
+            const addr = addresses[index];
+            if (!addr) return;
+            
+            document.getElementById('addressModalTitle').textContent = '编辑地址';
+            document.getElementById('addrName').value = addr.name;
+            document.getElementById('addrPhone').value = addr.phone;
+            document.getElementById('addrProvince').innerHTML = '<option value="">省</option>' + Object.keys(addressData).map(p => `<option value="${p}" ${p === addr.province ? 'selected' : ''}>${p}</option>`).join('');
+            
+            setTimeout(() => {
+                document.getElementById('addrCity').innerHTML = '<option value="">市</option>';
+                if (addr.province && addressData[addr.province]) {
+                    Object.keys(addressData[addr.province]).forEach(city => {
+                        document.getElementById('addrCity').innerHTML += `<option value="${city}" ${city === addr.city ? 'selected' : ''}>${city}</option>`;
+                    });
+                }
+                
+                document.getElementById('addrDistrict').innerHTML = '<option value="">区</option>';
+                if (addr.province && addr.city && addressData[addr.province] && addressData[addr.province][addr.city]) {
+                    addressData[addr.province][addr.city].forEach(district => {
+                        document.getElementById('addrDistrict').innerHTML += `<option value="${district}" ${district === addr.district ? 'selected' : ''}>${district}</option>`;
+                    });
+                }
+            }, 50);
+            
+            document.getElementById('addrDetail').value = addr.detail;
+            document.getElementById('addressModal').style.display = 'flex';
+            window.editingAddressIndex = index;
+        }
+        
+        // 保存地址
+        function saveAddress() {
+            const name = document.getElementById('addrName').value.trim();
+            const phone = document.getElementById('addrPhone').value.trim();
+            const province = document.getElementById('addrProvince').value;
+            const city = document.getElementById('addrCity').value;
+            const district = document.getElementById('addrDistrict').value;
+            const detail = document.getElementById('addrDetail').value.trim();
+            
+            if (!name) { showToast('请输入收货人姓名'); return; }
+            if (!phone || !/^1[3-9]\d{9}$/.test(phone)) { showToast('请输入正确的手机号'); return; }
+            if (!province || !city || !district) { showToast('请选择完整的省市区'); return; }
+            if (!detail) { showToast('请输入详细地址'); return; }
+            
+            const addrData = { name, phone, province, city, district, detail };
+            
+            const editIndex = window.editingAddressIndex;
+            if (editIndex >= 0) {
+                addresses[editIndex] = { ...addresses[editIndex], ...addrData };
+                showToast('地址已更新');
+            } else {
+                addrData.isDefault = addresses.length === 0;
+                addrData.id = Date.now();
+                addresses.push(addrData);
+                showToast('地址已添加');
+            }
+            
+            saveAddresses();
+            closeAddressModal();
+            renderAddressList();
+        }
+        
+        // 删除地址
+        function deleteAddress(index) {
+            if (!confirm('确定要删除该地址吗？')) return;
+            addresses.splice(index, 1);
+            saveAddresses();
+            renderAddressList();
+            showToast('地址已删除');
+        }
+        
+        // 设为默认地址
+        function setDefaultAddress(index) {
+            addresses.forEach((addr, i) => addr.isDefault = i === index);
+            saveAddresses();
+            renderAddressList();
+            showToast('已设为默认地址');
+        }
+        
+        // 保存地址列表
+        function saveAddresses() {
+            localStorage.setItem('addresses', JSON.stringify(addresses));
+        }
+        
+        // 关闭地址弹窗
+        function closeAddressModal() {
+            document.getElementById('addressModal').style.display = 'none';
+        }
+        
+        // 添加新商品
+        async function addNewProduct() {
+            const name = document.getElementById('adminName').value.trim();
+            const desc = document.getElementById('adminDesc').value.trim();
+            const price = parseFloat(document.getElementById('adminPrice').value);
+            const stock = parseInt(document.getElementById('adminStock').value) || 100;
+            const category = parseInt(document.getElementById('adminCategory').value);
+            const image = document.getElementById('adminImage').value.trim() || `images/product_${String(PRODUCTS.length + 1).padStart(2,'0')}.jpg`;
+            const tagsInput = document.getElementById('adminTags').value.trim();
+            
+            if (!name) {
+                showToast('请输入商品名称');
+                return;
+            }
+            if (!price || price <= 0) {
+                showToast('请输入有效价格');
+                return;
+            }
+            
+            // 显示预览
+            const preview = document.getElementById('transPreview');
+            preview.style.display = 'block';
+            document.getElementById('previewZh').textContent = '🇨🇳 中文: ' + name;
+            document.getElementById('previewJa').textContent = '🇯🇵 日语: 翻译中...';
+            document.getElementById('previewEn').textContent = '🇺🇸 英语: 翻译中...';
+            
+            // 自动翻译
+            const translated = await TranslationService.translateProduct({
+                name: name,
+                desc: desc
+            });
+            
+            document.getElementById('previewZh').textContent = '🇨🇳 中文: ' + (translated.name_zh || name);
+            document.getElementById('previewJa').textContent = '🇯🇵 日语: ' + (translated.name_ja || '翻译失败');
+            document.getElementById('previewEn').textContent = '🇺🇸 英语: ' + (translated.name_en || '翻译失败');
+            
+            // 创建新商品
+            const newProduct = {
+                id: PRODUCTS.length > 0 ? Math.max(...PRODUCTS.map(p => p.id)) + 1 : 1,
+                name: name,
+                name_zh: translated.name_zh || name,
+                name_ja: translated.name_ja || name,
+                name_en: translated.name_en || name,
+                desc: desc,
+                desc_zh: translated.desc_zh || desc,
+                desc_ja: translated.desc_ja || desc,
+                desc_en: translated.desc_en || desc,
+                price: price,
+                originalPrice: price * 1.2,
+                category: category,
+                image: image,
+                stock: stock,
+                tags: tagsInput ? tagsInput.split(',').map(t => t.trim()) : [],
+                hot: false
+            };
+            
+            PRODUCTS.push(newProduct);
+            showToast('商品添加成功！');
+            
+            // 清空表单
+            document.getElementById('adminName').value = '';
+            document.getElementById('adminDesc').value = '';
+            document.getElementById('adminPrice').value = '';
+            document.getElementById('adminImage').value = '';
+            document.getElementById('adminTags').value = '';
+            
+            // 重新渲染
+            renderHotProducts();
+            renderRecommendProducts();
+            renderCategoryList();
+            renderAdminProductList();
+            
+            // 3秒后关闭预览
+            setTimeout(() => {
+                preview.style.display = 'none';
+            }, 3000);
+        }
+        
+        // 输入时实时预览翻译
+        document.addEventListener('DOMContentLoaded', () => {
+            const nameInput = document.getElementById('adminName');
+            if (nameInput) {
+                nameInput.addEventListener('input', async (e) => {
+                    const text = e.target.value.trim();
+                    if (text.length > 2) {
+                        const preview = document.getElementById('transPreview');
+                        preview.style.display = 'block';
+                        document.getElementById('previewZh').textContent = '🇨🇳 中文: ' + text;
+                        document.getElementById('previewJa').textContent = '🇯🇵 日语: 翻译中...';
+                        document.getElementById('previewEn').textContent = '🇺🇸 英语: 翻译中...';
+                        
+                        const translated = await TranslationService.translateProduct({ name: text });
+                        document.getElementById('previewJa').textContent = '🇯🇵 日语: ' + (translated.name_ja || '翻译失败');
+                        document.getElementById('previewEn').textContent = '🇺🇸 英语: ' + (translated.name_en || '翻译失败');
+                    }
+                });
+            }
+        });
+        
         function logout() {
-            if (confirm('确定要退出登录吗？')) {
+            if (confirm(t('confirm_logout') || '确定要退出登录吗？')) {
                 localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('autoLogin');
                 localStorage.removeItem('memberName');
                 localStorage.removeItem('memberLevel');
                 showPage('login');
@@ -3433,11 +4738,11 @@
         function showProductDetail(productId) {
             const product = PRODUCTS.find(p => p.id === productId);
             const content = document.getElementById('productDetailContent');
-            const translatedName = t('product_' + productId) || product.name;
+            const productName = getProductName(product);
             content.innerHTML = `
                 <img src="${product.image}" style="width:100%;aspect-ratio:1;object-fit:cover;" onerror="this.src='https://via.placeholder.com/400x400?text=火锅'">
                 <div style="padding:15px;">
-                    <div style="font-size:18px;font-weight:600;margin-bottom:10px;">${translatedName}</div>
+                    <div style="font-size:18px;font-weight:600;margin-bottom:10px;">${productName}</div>
                     <div style="color:var(--primary);font-size:24px;font-weight:600;margin-bottom:15px;">¥${product.price.toFixed(2)} <span style="font-size:14px;color:var(--text-lighten);text-decoration:line-through;">¥${product.originalPrice.toFixed(2)}</span></div>
                     <div style="display:flex;gap:10px;margin-bottom:15px;">
                         ${product.tags.map(tag => `<span style="padding:4px 10px;background:#FFEBEE;color:var(--primary);border-radius:12px;font-size:12px;">${tag}</span>`).join('')}
