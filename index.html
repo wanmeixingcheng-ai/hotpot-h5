@@ -494,7 +494,7 @@
         
         .tab-item.active,
         .tab-item.active span,
-        .tab-item.active span:last-child {
+        .tab-item.active .tab-text {
             color: var(--primary) !important;
         }
         
@@ -1848,7 +1848,7 @@
             <div class="cart-total">
                 合计: <strong id="cartTotal">¥0</strong>
             </div>
-            <button class="btn-checkout" onclick="goCheckout()">去结算</button>
+            <button id="btnCheckout" class="btn-checkout" onclick="goCheckout()">去结算</button>
         </div>
     </div>
     
@@ -2394,20 +2394,20 @@
     <div class="tab-bar">
         <div class="tab-item active" onclick="showPage('home')" data-page="home">
             <span>🏠</span>
-            <span>首页</span>
+            <span class="tab-text">首页</span>
         </div>
         <div class="tab-item" onclick="showPage('category')" data-page="category">
             <span>📂</span>
-            <span>分类</span>
+            <span class="tab-text">分类</span>
         </div>
         <div class="tab-item" onclick="showPage('cart')" data-page="cart">
             <span>🛒</span>
-            <span id="cartTabText">购物车</span>
+            <span class="tab-text" id="cartTabText">购物车</span>
             <span class="badge" id="cartBadge" style="display:none;">0</span>
         </div>
         <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
-            <span>我</span>
+            <span class="tab-text">我</span>
         </div>
     </div>
     
@@ -3053,6 +3053,9 @@
                     link.onclick = () => showPage('reset');
                 }
             });
+            // 更新去结算按钮
+            const btnCheckout = document.getElementById('btnCheckout');
+            if (btnCheckout) btnCheckout.textContent = t('btn_checkout');
             // 更新分类名称
             CATEGORIES.forEach((cat, i) => {
                 cat.name = t('category_' + (i + 1));
