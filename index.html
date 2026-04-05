@@ -472,21 +472,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 3px;
             color: #555555;
-            font-size: 17px;
-            letter-spacing: 1px;
+            font-size: 12px;
+            letter-spacing: 0.5px;
             cursor: pointer;
-            padding: 5px 15px;
+            padding: 5px 8px;
             position: relative;
+            white-space: nowrap;
+        }
+        
+        .tab-item span:first-child {
+            font-size: 20px;
+            line-height: 1;
+        }
+        
+        .tab-item span:last-child {
+            font-size: 11px;
+            letter-spacing: 0;
         }
         
         .tab-item.active {
             color: var(--primary);
-        }
-        
-        .tab-item span:first-child {
-            font-size: 22px;
         }
         
         .tab-item .badge {
