@@ -2152,7 +2152,7 @@
         </div>
         <div class="tab-item" onclick="showPage('cart')" data-page="cart">
             <span>🛒</span>
-            <span>购物车</span>
+            <span id="cartTabText">购物车</span>
             <span class="badge" id="cartBadge" style="display:none;">0</span>
         </div>
         <div class="tab-item" onclick="showPage('member')" data-page="member">
@@ -2279,7 +2279,8 @@
                 my_coupons: '我的优惠券',
                 my_addresses: '收货地址',
                 // 购物车
-                cart_empty: '购物车是空的',
+                cart_empty: '购物车空空如也',
+                btn_go_shop: '去逛逛',
                 cart_total: '合计',
                 cart_freight: '运费',
                 cart_freight_hint: '（满99元免运费）',
@@ -2366,6 +2367,7 @@
                 my_coupons: 'クーポン',
                 my_addresses: '配送先',
                 cart_empty: 'カートは空です',
+                btn_go_shop: '買い物を続ける',
                 cart_total: '合計',
                 cart_freight: '送料',
                 cart_freight_hint: '（¥1999以上で無料）',
@@ -2446,7 +2448,8 @@
                 my_orders: 'My Orders',
                 my_coupons: 'My Coupons',
                 my_addresses: 'My Addresses',
-                cart_empty: 'Cart is empty',
+                cart_empty: 'Your cart is empty',
+                btn_go_shop: 'Go Shopping',
                 cart_total: 'Total',
                 cart_freight: 'Shipping',
                 cart_freight_hint: '(Free over ¥1999)',
@@ -2514,8 +2517,10 @@
             const tabs = document.querySelectorAll('.tab-item span:last-child');
             if (tabs[0]) tabs[0].textContent = t('nav_home');
             if (tabs[1]) tabs[1].textContent = t('nav_category');
-            if (tabs[2]) tabs[2].textContent = t('nav_cart');
             if (tabs[3]) tabs[3].textContent = t('nav_profile');
+            // 更新购物车导航文字（单独处理因为有badge）
+            const cartTabText = document.getElementById('cartTabText');
+            if (cartTabText) cartTabText.textContent = t('nav_cart');
             // 更新首页标题
             const hotTitle = document.getElementById('hotTitle');
             if (hotTitle) hotTitle.textContent = t('hot_title');
@@ -2943,8 +2948,8 @@
                 content.innerHTML = `
                     <div class="cart-empty">
                         <div class="cart-empty-icon">🛒</div>
-                        <div class="cart-empty-text">购物车空空如也</div>
-                        <button class="btn-primary" onclick="showPage('home')">去逛逛</button>
+                        <div class="cart-empty-text" id="cartEmptyText">${t('cart_empty')}</div>
+                        <button class="btn-primary" id="cartGoShopBtn" onclick="showPage('home')">${t('btn_go_shop')}</button>
                     </div>
                 `;
                 footer.style.display = 'none';
