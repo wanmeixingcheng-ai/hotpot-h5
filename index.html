@@ -2382,7 +2382,7 @@
             'en': {
                 nav_home: 'Home',
                 nav_category: 'Category',
-                nav_cart: 'Cart',
+                nav_cart: 'Shopping Cart',
                 nav_profile: 'Me',
                 search_placeholder: 'Search hotpot ingredients...',
                 lang_label: 'EN',
@@ -2468,7 +2468,7 @@
             localStorage.setItem('lang', lang);
             applyTranslations();
             // 更新语言切换按钮显示
-            const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English(US)' };
+            const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English' };
             document.querySelector('.lang-switch span:first-child').textContent = langNames[lang];
             closeLangMenu();
         }
@@ -2565,15 +2565,19 @@
             menu.innerHTML = `
                 <div class="lang-option ${currentLang === 'zh' ? 'active' : ''}" onclick="setLang('zh'); event.stopPropagation();">中文</div>
                 <div class="lang-option ${currentLang === 'ja' ? 'active' : ''}" onclick="setLang('ja'); event.stopPropagation();">日本語</div>
-                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en'); event.stopPropagation();">English(US)</div>
+                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en'); event.stopPropagation();">English</div>
             `;
             document.body.appendChild(menu);
             
-            // 计算菜单位置
+            // 计算菜单位置（基于按钮右边缘，向左对齐）
             const rect = langSwitch.getBoundingClientRect();
+            const menuWidth = 100; // 菜单宽度估计
+            let leftPos = rect.right - menuWidth;
+            // 确保不超出屏幕左边界
+            if (leftPos < 10) leftPos = 10;
             menu.style.top = (rect.bottom + window.scrollY + 5) + 'px';
-            menu.style.left = (rect.left + window.scrollX) + 'px';
-            menu.style.right = 'auto';
+            menu.style.right = '10px';
+            menu.style.left = 'auto';
             
             setTimeout(() => menu.classList.add('show'), 10);
             // 点击其他区域关闭
@@ -2689,7 +2693,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 语言检测和应用
             currentLang = detectLanguage();
-            const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English(US)' };
+            const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English' };
             document.querySelector('.lang-switch span:first-child').textContent = langNames[currentLang];
             applyTranslations();
             
