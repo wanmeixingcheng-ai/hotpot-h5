@@ -492,7 +492,8 @@
             letter-spacing: 0;
         }
         
-        .tab-item.active {
+        .tab-item.active,
+        .tab-item.active span {
             color: var(--primary);
         }
         
@@ -3503,6 +3504,12 @@
                 updateMemberInfo();
             }
             
+            // 恢复刷新前的页面状态
+            const savedPage = localStorage.getItem('currentPage');
+            if (savedPage && savedPage !== 'home') {
+                showPage(savedPage);
+            }
+            
             // 恢复记住的登录名
             const rememberedAccount = localStorage.getItem('rememberedAccount');
             if (rememberedAccount) {
@@ -3991,6 +3998,9 @@
         
         // 页面切换
         function showPage(pageName) {
+            // 保存当前页面状态（用于刷新恢复）
+            localStorage.setItem('currentPage', pageName);
+            
             // 会员页检查登录状态
             if (pageName === 'member') {
                 if (!isLoggedIn()) {
