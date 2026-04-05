@@ -180,6 +180,48 @@
             font-size: 10px;
         }
         
+        .lang-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            z-index: 1000;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .lang-menu.show {
+            opacity: 1;
+            transform: translateY(5px);
+            pointer-events: auto;
+        }
+        
+        .lang-option {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #333;
+            transition: background 0.2s;
+        }
+        
+        .lang-option:hover {
+            background: #f5f5f5;
+        }
+        
+        .lang-option.active {
+            background: #FFF5EE;
+            color: #E53935;
+            font-weight: 600;
+        }
+        
         /* Banner */
         .banner {
             padding: 8px 0px;
@@ -1684,7 +1726,7 @@
                     <span class="search-icon">🔍</span>
                     <input type="text" placeholder="鍋の材料を検索..." id="searchInput">
                 </div>
-                <div class="lang-switch">
+                <div class="lang-switch" onclick="toggleLangMenu(); event.stopPropagation();">
                     <span>简</span>
                     <span class="lang-arrow">▼</span>
                 </div>
@@ -2168,6 +2210,378 @@
     </div>
     
     <script>
+        // ==================== 国际化系统 ====================
+        const I18N = {
+            'zh': {
+                // 导航
+                nav_home: '首页',
+                nav_category: '分类',
+                nav_cart: '购物车',
+                nav_profile: '我',
+                // 品牌区
+                search_placeholder: '搜索火锅食材...',
+                lang_label: '简',
+                // 分类
+                category_1: '底料蘸料',
+                category_2: '肉类拼盘',
+                category_3: '海鲜系列',
+                category_4: '蔬菜菌菇',
+                category_5: '豆制品',
+                category_6: '主食小吃',
+                category_7: '饮料酒水',
+                category_8: '锅具餐具',
+                // 商品标签
+                tag_hot: '热销',
+                tag_new: '新品',
+                tag_burst: '爆款',
+                tag_must: '必点',
+                tag_premium: '高端',
+                tag_low_stock: '低库存',
+                tag_spicy: '解辣',
+                // 按钮
+                btn_add_cart: '加入购物车',
+                btn_checkout: '去结算',
+                btn_login: '登录',
+                btn_register: '注册',
+                btn_logout: '退出登录',
+                // 登录页
+                login_title: '会员登录',
+                login_account: '请输入邮箱/手机号',
+                login_password: '请输入登录密码',
+                login_register: '立即注册',
+                login_forgot: '找回密码',
+                login_no_account: '已有账号？立即登录',
+                // 注册页
+                register_title: '会员注册',
+                register_phone: '请输入手机号',
+                register_code: '请输入验证码',
+                register_send_code: '发送验证码',
+                register_password: '请设置登录密码',
+                register_confirm: '请确认登录密码',
+                register_btn: '注 册',
+                // 会员中心
+                member_center: '会员中心',
+                my_orders: '我的订单',
+                my_coupons: '我的优惠券',
+                my_addresses: '收货地址',
+                // 购物车
+                cart_empty: '购物车是空的',
+                cart_total: '合计',
+                cart_freight: '运费',
+                cart_freight_hint: '（满99元免运费）',
+                cart_use_coupon: '使用优惠券',
+                // 结算
+                checkout_title: '确认订单',
+                checkout_delivery: '外卖配送',
+                checkout_pickup: '到店自取',
+                checkout_remark: '备注',
+                checkout_remark_hint: '请输入备注信息（选填）',
+                checkout_pay: '提交订单',
+                // 支付
+                pay_title: '订单支付',
+                pay_wechat: '微信支付',
+                pay_alipay: '支付宝',
+                pay_card: '银行卡',
+                pay_confirm: '确认支付',
+                // 商品详情
+                product_detail: '商品详情',
+                product_stock: '库存',
+                product_sold: '已售',
+                // 订单
+                order_wait_pay: '待支付',
+                order_wait_send: '待发货',
+                order_wait_receive: '待收货',
+                order_finished: '已完成',
+                order_cancelled: '已取消',
+                // 其他
+                contact_service: '请联系客服找回密码',
+                order_success: '订单提交成功',
+                pay_success: '支付成功',
+                loading: '加载中...',
+            },
+            'ja': {
+                nav_home: 'ホーム',
+                nav_category: 'カテゴリー',
+                nav_cart: 'カート',
+                nav_profile: 'マイページ',
+                search_placeholder: '鍋食材を検索...',
+                lang_label: '日',
+                category_1: '鍋スープ・たれ',
+                category_2: '肉盛り合わせ',
+                category_3: 'シーフード',
+                category_4: '野菜・きのこ',
+                category_5: '豆腐製品',
+                category_6: '主食・おやつ',
+                category_7: '飲み物',
+                category_8: '鍋器具',
+                tag_hot: '人気',
+                tag_new: '新作',
+                tag_burst: '定番',
+                tag_must: '必注文',
+                tag_premium: '高級',
+                tag_low_stock: '残りわずか',
+                tag_spicy: '辛さ中和',
+                btn_add_cart: 'カートに追加',
+                btn_checkout: '结算',
+                btn_login: 'ログイン',
+                btn_register: '登録',
+                btn_logout: 'ログアウト',
+                login_title: '会員ログイン',
+                login_account: 'メール/電話番号を入力',
+                login_password: 'パスワードを入力',
+                login_register: '新規登録',
+                login_forgot: 'パスワードを忘れた',
+                login_no_account: 'アカウントある？ログインへ',
+                register_title: '新規会員登録',
+                register_phone: '電話番号を入力',
+                register_code: '確認コードを入力',
+                register_send_code: '確認コード送信',
+                register_password: 'パスワードを設定',
+                register_confirm: 'パスワード確認',
+                register_btn: '登 録',
+                member_center: 'マイページ',
+                my_orders: '注文履歴',
+                my_coupons: 'クーポン',
+                my_addresses: '配送先',
+                cart_empty: 'カートは空です',
+                cart_total: '合計',
+                cart_freight: '送料',
+                cart_freight_hint: '（¥1999以上で無料）',
+                cart_use_coupon: 'クーポンを使用',
+                checkout_title: '注文確認',
+                checkout_delivery: '配達',
+                checkout_pickup: '店舗受取',
+                checkout_remark: '備考',
+                checkout_remark_hint: '備考を入力（任意）',
+                checkout_pay: '注文を提交',
+                pay_title: '決済',
+                pay_wechat: 'LINE Pay',
+                pay_alipay: 'PayPay',
+                pay_card: 'クレジットカード',
+                pay_confirm: ' 결제確認',
+                product_detail: '商品詳細',
+                product_stock: '在庫',
+                product_sold: '販売済み',
+                order_wait_pay: '支払待ち',
+                order_wait_send: '発送待ち',
+                order_wait_receive: '配達待ち',
+                order_finished: '完了',
+                order_cancelled: 'キャンセル',
+                contact_service: '客服联系してパスワードを回復',
+                order_success: '注文完了',
+                pay_success: '支払完了',
+                loading: '読み込み中...',
+            },
+            'en': {
+                nav_home: 'Home',
+                nav_category: 'Category',
+                nav_cart: 'Cart',
+                nav_profile: 'Me',
+                search_placeholder: 'Search hotpot ingredients...',
+                lang_label: 'EN',
+                category_1: 'Soup Base & Dipping',
+                category_2: 'Meat Platter',
+                category_3: 'Seafood',
+                category_4: 'Vegetables & Mushrooms',
+                category_5: 'Tofu Products',
+                category_6: 'Main Food & Snacks',
+                category_7: 'Drinks',
+                category_8: 'Cookware',
+                tag_hot: 'Hot',
+                tag_new: 'New',
+                tag_burst: 'Best Seller',
+                tag_must: 'Must Try',
+                tag_premium: 'Premium',
+                tag_low_stock: 'Low Stock',
+                tag_spicy: 'Cool Down',
+                btn_add_cart: 'Add to Cart',
+                btn_checkout: 'Checkout',
+                btn_login: 'Login',
+                btn_register: 'Register',
+                btn_logout: 'Logout',
+                login_title: 'Member Login',
+                login_account: 'Enter email/phone',
+                login_password: 'Enter password',
+                login_register: 'Register Now',
+                login_forgot: 'Forgot Password',
+                login_no_account: 'Have account? Login',
+                register_title: 'Member Register',
+                register_phone: 'Enter phone number',
+                register_code: 'Enter verification code',
+                register_send_code: 'Send Code',
+                register_password: 'Set password',
+                register_confirm: 'Confirm password',
+                register_btn: 'Register',
+                member_center: 'My Account',
+                my_orders: 'My Orders',
+                my_coupons: 'My Coupons',
+                my_addresses: 'My Addresses',
+                cart_empty: 'Cart is empty',
+                cart_total: 'Total',
+                cart_freight: 'Shipping',
+                cart_freight_hint: '(Free over ¥1999)',
+                cart_use_coupon: 'Use Coupon',
+                checkout_title: 'Confirm Order',
+                checkout_delivery: 'Delivery',
+                checkout_pickup: 'Pickup',
+                checkout_remark: 'Remarks',
+                checkout_remark_hint: 'Enter remarks (optional)',
+                checkout_pay: 'Submit Order',
+                pay_title: 'Payment',
+                pay_wechat: 'LINE Pay',
+                pay_alipay: 'PayPay',
+                pay_card: 'Credit Card',
+                pay_confirm: 'Confirm Payment',
+                product_detail: 'Product Details',
+                product_stock: 'Stock',
+                product_sold: 'Sold',
+                order_wait_pay: 'Pending Payment',
+                order_wait_send: 'Pending Shipment',
+                order_wait_receive: 'Pending Delivery',
+                order_finished: 'Completed',
+                order_cancelled: 'Cancelled',
+                contact_service: 'Please contact customer service to retrieve password',
+                order_success: 'Order Submitted Successfully',
+                pay_success: 'Payment Successful',
+                loading: 'Loading...',
+            }
+        };
+
+        // 当前语言
+        let currentLang = localStorage.getItem('lang') || 'zh';
+
+        // 获取翻译
+        function t(key) {
+            return I18N[currentLang][key] || key;
+        }
+
+        // 设置语言
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            applyTranslations();
+            // 更新语言切换按钮显示
+            document.querySelector('.lang-switch span:first-child').textContent = I18N[lang].lang_label;
+            closeLangMenu();
+        }
+
+        // 检测系统语言
+        function detectLanguage() {
+            const savedLang = localStorage.getItem('lang');
+            if (savedLang && I18N[savedLang]) {
+                return savedLang;
+            }
+            const systemLang = navigator.language || navigator.userLanguage;
+            if (systemLang.startsWith('zh')) return 'zh';
+            if (systemLang.startsWith('ja')) return 'ja';
+            return 'en'; // 默认英文
+        }
+
+        // 应用翻译到页面
+        function applyTranslations() {
+            // 更新导航栏
+            const tabs = document.querySelectorAll('.tab-item span:last-child');
+            if (tabs[0]) tabs[0].textContent = t('nav_home');
+            if (tabs[1]) tabs[1].textContent = t('nav_category');
+            if (tabs[2]) tabs[2].textContent = t('nav_cart');
+            if (tabs[3]) tabs[3].textContent = t('nav_profile');
+            // 更新搜索框
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.placeholder = t('search_placeholder');
+            // 更新登录页
+            const loginTitle = document.querySelector('.login-page-title');
+            if (loginTitle) loginTitle.textContent = t('login_title');
+            const loginAccount = document.getElementById('loginAccount');
+            if (loginAccount) loginAccount.placeholder = t('login_account');
+            const loginPassword = document.getElementById('loginPassword');
+            if (loginPassword) loginPassword.placeholder = t('login_password');
+            // 更新按钮文字
+            document.querySelectorAll('.login-btn').forEach(btn => {
+                if (btn.textContent.includes('登录') || btn.textContent.includes('ログイン') || btn.textContent.includes('Login')) {
+                    btn.textContent = t('btn_login');
+                }
+            });
+            // 更新链接
+            document.querySelectorAll('.login-link').forEach(link => {
+                if (link.textContent.includes('立即注册') || link.textContent.includes('新規登録') || link.textContent.includes('Register')) {
+                    link.textContent = t('login_register');
+                }
+                if (link.textContent.includes('找回密码') || link.textContent.includes('忘れた') || link.textContent.includes('Forgot')) {
+                    link.textContent = t('login_forgot');
+                    link.onclick = () => showToast(t('contact_service'));
+                }
+            });
+            // 更新分类名称
+            CATEGORIES.forEach((cat, i) => {
+                cat.name = t('category_' + (i + 1));
+            });
+            // 更新商品标签
+            PRODUCTS.forEach(product => {
+                product.tags = product.tags.map(tag => {
+                    if (tag === '热销') return t('tag_hot');
+                    if (tag === '新品') return t('tag_new');
+                    if (tag === '爆款') return t('tag_burst');
+                    if (tag === '必点') return t('tag_must');
+                    if (tag === '高端') return t('tag_premium');
+                    if (tag === '低库存') return t('tag_low_stock');
+                    if (tag === '解辣') return t('tag_spicy');
+                    return tag;
+                });
+            });
+            // 重新渲染
+            renderCategories();
+            renderHotProducts();
+            renderRecommendProducts();
+            renderCategoryList();
+        }
+
+        // 语言切换菜单
+        function toggleLangMenu() {
+            const menu = document.getElementById('langMenu');
+            if (menu) {
+                menu.classList.toggle('show');
+            } else {
+                showLangMenu();
+            }
+        }
+
+        function showLangMenu() {
+            const langSwitch = document.querySelector('.lang-switch');
+            const menu = document.createElement('div');
+            menu.id = 'langMenu';
+            menu.className = 'lang-menu';
+            menu.innerHTML = `
+                <div class="lang-option ${currentLang === 'zh' ? 'active' : ''}" onclick="setLang('zh')">
+                    <span>🇨🇳</span> 简体中文
+                </div>
+                <div class="lang-option ${currentLang === 'ja' ? 'active' : ''}" onclick="setLang('ja')">
+                    <span>🇯🇵</span> 日本語
+                </div>
+                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">
+                    <span>🇺🇸</span> English
+                </div>
+            `;
+            langSwitch.parentElement.appendChild(menu);
+            setTimeout(() => menu.classList.add('show'), 10);
+            // 点击其他区域关闭
+            document.addEventListener('click', closeLangMenuOnClick);
+        }
+
+        function closeLangMenu() {
+            const menu = document.getElementById('langMenu');
+            if (menu) {
+                menu.classList.remove('show');
+                setTimeout(() => menu.remove(), 300);
+            }
+            document.removeEventListener('click', closeLangMenuOnClick);
+        }
+
+        function closeLangMenuOnClick(e) {
+            if (!e.target.closest('.lang-switch') && !e.target.closest('.lang-menu')) {
+                closeLangMenu();
+            }
+        }
+
         // 数据
         const CATEGORIES = [
             { id: 1, name: '底料蘸料', icon: '🍲' },
@@ -2260,6 +2674,11 @@
         
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 语言检测和应用
+            currentLang = detectLanguage();
+            document.querySelector('.lang-switch span:first-child').textContent = I18N[currentLang].lang_label;
+            applyTranslations();
+            
             renderCategories();
             renderHotProducts();
             renderRecommendProducts();
