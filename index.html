@@ -493,7 +493,8 @@
         }
         
         .tab-item.active,
-        .tab-item.active span {
+        .tab-item.active span,
+        .tab-item.active span:last-child {
             color: var(--primary) !important;
         }
         
@@ -4741,6 +4742,10 @@
         
         // 去结算
         function goCheckout() {
+            if (!isLoggedIn()) {
+                showPage('login');
+                return;
+            }
             showPage('checkout');
         }
         
