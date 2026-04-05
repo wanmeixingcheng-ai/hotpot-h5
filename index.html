@@ -4013,6 +4013,14 @@
             // 保存当前页面状态（用于刷新恢复）
             localStorage.setItem('currentPage', pageName);
             
+            // 会员页检查登录状态（放最前面，避免清除tab样式）
+            if (pageName === 'member') {
+                if (!isLoggedIn()) {
+                    showPage('login');
+                    return;
+                }
+            }
+            
             // 登录/注册页不需要记录上一页
             if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register'].includes(pageName)) {
                 previousPage = pageName;
@@ -4033,14 +4041,8 @@
                 if (text) text.style.color = '#E53935';
             }
             
-            // 会员页检查登录状态
             if (pageName === 'member') {
-                if (!isLoggedIn()) {
-                    showPage('login');
-                    return;
-                } else {
-                    updateMemberInfo();
-                }
+                updateMemberInfo();
             }
             
             if (pageName === 'cart') renderCart();
