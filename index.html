@@ -4009,15 +4009,6 @@
             // 保存当前页面状态（用于刷新恢复）
             localStorage.setItem('currentPage', pageName);
             
-            // 会员页检查登录状态
-            if (pageName === 'member') {
-                if (!isLoggedIn()) {
-                    pageName = 'login';
-                } else {
-                    updateMemberInfo();
-                }
-            }
-            
             // 登录/注册页不需要记录上一页
             if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register'].includes(pageName)) {
                 previousPage = pageName;
@@ -4036,6 +4027,16 @@
                 tab.classList.add('active');
                 const text = tab.querySelector('.tab-text');
                 if (text) text.style.color = '#E53935';
+            }
+            
+            // 会员页检查登录状态
+            if (pageName === 'member') {
+                if (!isLoggedIn()) {
+                    showPage('login');
+                    return;
+                } else {
+                    updateMemberInfo();
+                }
             }
             
             if (pageName === 'cart') renderCart();
