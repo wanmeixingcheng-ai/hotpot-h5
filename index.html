@@ -274,6 +274,35 @@
             background: white;
         }
         
+        /* 轮播前进后退按钮 */
+        .banner-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.4);
+            color: white;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.3s;
+        }
+        .banner-control:hover {
+            background: rgba(0,0,0,0.6);
+        }
+        .banner-control.prev {
+            left: 10px;
+        }
+        .banner-control.next {
+            right: 10px;
+        }
+        
         /* Categories */
         .categories {
             display: grid;
@@ -1797,6 +1826,9 @@
                     <div class="banner-slide"><img src="images/898.jpg" alt="ボックス火鍋"></div>
                     <div class="banner-slide"><img src="images/test.jpg" alt="ボックス火鍋"></div>
                 </div>
+                <!-- 轮播前进后退按钮 -->
+                <button class="banner-control prev" onclick="prevSlide()" aria-label="上一张">‹</button>
+                <button class="banner-control next" onclick="nextSlide()" aria-label="下一张">›</button>
                 <div class="banner-dots" id="bannerDots">
                     <div class="banner-dot active" onclick="goToSlide(0)"></div>
                     <div class="banner-dot" onclick="goToSlide(1)"></div>
@@ -3082,6 +3114,10 @@
             renderHotProducts();
             renderRecommendProducts();
             renderCategoryList();
+            // 如果在商品详情页，重新渲染商品详情
+            if (currentProductId && document.getElementById('page-product')?.classList.contains('active')) {
+                showProductDetail(currentProductId);
+            }
         }
 
         // 语言切换菜单
@@ -3449,11 +3485,13 @@
         
         // 显示注册页
         function showRegister() {
+            console.log('showRegister被调用');
             showPage('register');
         }
         
         // 显示登录页
         function showLogin() {
+            console.log('showLogin被调用');
             showPage('login');
         }
         
@@ -3471,14 +3509,22 @@
         const totalSlides = 3;
         
         function goToSlide(index) {
+            // 确保索引在有效范围内
+            if (index < 0) index = totalSlides - 1;
+            if (index >= totalSlides) index = 0;
             currentSlide = index;
-            const slides = document.getElementById('bannerSlides');
+            
+            const slidesContainer = document.getElementById('bannerSlides');
             const dots = document.querySelectorAll('.banner-dot');
-            if (slides) {
-                slides.style.transform = `translateX(-${index * 100}%)`;
+            
+            if (slidesContainer) {
+                slidesContainer.style.transform = `translateX(-${index * 100}%)`;
             }
+            
             dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
+                if (dot) {
+                    dot.classList.toggle('active', i === index);
+                }
             });
         }
         
@@ -3487,8 +3533,14 @@
             goToSlide(next);
         }
         
+        function prevSlide() {
+            const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+            goToSlide(prev);
+        }
+        
         function startAutoSlide() {
-            if (slideInterval) clearInterval(slideInterval);
+            stopAutoSlide();
+            goToSlide(0);
             slideInterval = setInterval(nextSlide, 3000);
         }
         
@@ -3532,7 +3584,14 @@
             updateCartBadge();
             updateMemberStats();
             loadProducts();
-            startAutoSlide();
+            
+            // 延迟启动轮播，等待DOM完全渲染
+            setTimeout(() => {
+                console.log('初始化轮播');
+                startAutoSlide();
+                console.log('轮播已启动，当前:', currentSlide);
+            }, 200);
+            
             // 绑定搜索功能
             const searchInput = document.getElementById('searchInput');
             if (searchInput) {
@@ -3727,6 +3786,13 @@
             }
         }
         
+        // 获取翻译后的产品名称
+        function getTranslatedProductName(product) {
+            if (currentLang === 'ja') return product.name_ja || product.name;
+            if (currentLang === 'en') return product.name_en || product.name;
+            return product.name_zh || product.name;
+        }
+        
         // 渲染购物车
         function renderCart() {
             const content = document.getElementById('cartContent');
@@ -3748,7 +3814,7 @@
                 <div class="cart-item">
                     <img class="cart-item-image" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80x80?text=火锅'">
                     <div class="cart-item-info">
-                        <div class="cart-item-name">${getProductName(item)}</div>
+                        <div class="cart-item-name">${getTranslatedProductName(item)}</div>
                         <div class="cart-item-price">¥${item.price.toFixed(2)}</div>
                         <div class="quantity-control">
                             <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
@@ -3785,7 +3851,7 @@
                 <div class="order-item">
                     <img class="order-item-image" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/50x50?text=火锅'">
                     <div class="order-item-info">
-                        <div class="order-item-name">${item.name}</div>
+                        <div class="order-item-name">${getTranslatedProductName(item)}</div>
                         <div class="order-item-spec">x${item.quantity}</div>
                     </div>
                     <div class="order-item-right">
@@ -4023,8 +4089,14 @@
                 previousPage = pageName;
             }
             
+            console.log('showPage:', pageName);
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pageName).classList.add('active');
+            const targetPage = document.getElementById('page-' + pageName);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            } else {
+                console.error('页面未找到: page-' + pageName);
+            }
             
             document.querySelectorAll('.tab-item').forEach(t => {
                 t.classList.remove('active');
@@ -4057,6 +4129,7 @@
         
         // 返回上一页
         function goBack() {
+            console.log('goBack调用, previousPage:', previousPage);
             showPage(previousPage || 'home');
         }
         
@@ -4766,10 +4839,12 @@
         }
         
         // 商品详情
+        let currentProductId = null; // 保存当前查看的商品ID
         function showProductDetail(productId) {
+            currentProductId = productId; // 保存当前商品ID
             const product = PRODUCTS.find(p => p.id === productId);
             const content = document.getElementById('productDetailContent');
-            const productName = getProductName(product);
+            const productName = getTranslatedProductName(product);
             content.innerHTML = `
                 <img src="${product.image}" style="width:100%;aspect-ratio:1;object-fit:cover;" onerror="this.src='https://via.placeholder.com/400x400?text=火锅'">
                 <div style="padding:15px;">
