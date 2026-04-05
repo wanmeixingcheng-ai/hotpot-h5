@@ -4053,6 +4053,16 @@
             if (pageName !== 'category') {
                 window.scrollTo(0, 0);
             }
+            
+            // 确保导航栏颜色正确
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-text').forEach(t => t.style.color = '#555555');
+            const activeTab = document.querySelector(`.tab-item[data-page="${pageName}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+                const textEl = activeTab.querySelector('.tab-text');
+                if (textEl) textEl.style.color = '#E53935';
+            }
         }
         
         // 返回上一页
