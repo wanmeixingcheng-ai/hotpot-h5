@@ -492,11 +492,8 @@
             letter-spacing: 0;
         }
         
-        .tab-item.active,
-        .tab-item.active span,
-        .tab-item.active .tab-text,
-        .tab-bar .tab-item.active span {
-            color: var(--primary) !important;
+        .tab-item.active span.tab-text {
+            color: #E53935 !important;
         }
         
         .tab-item .badge {
@@ -2408,7 +2405,7 @@
         </div>
         <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
-            <span class="tab-text" id="memberTabText" style="color:inherit;">我</span>
+            <span class="tab-text" id="memberTabText">我</span>
         </div>
     </div>
     
