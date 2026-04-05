@@ -1734,7 +1734,7 @@
                     <input type="text" placeholder="鍋の材料を検索..." id="searchInput">
                 </div>
                 <div class="lang-switch" onclick="toggleLangMenu(); event.stopPropagation();">
-                    <span>简</span>
+                    <span id="langBtnText">中文</span>
                     <span class="lang-arrow">▼</span>
                 </div>
             </div>
@@ -2468,7 +2468,8 @@
             localStorage.setItem('lang', lang);
             applyTranslations();
             // 更新语言切换按钮显示
-            document.querySelector('.lang-switch span:first-child').textContent = I18N[lang].lang_label;
+            const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English(US)' };
+            document.querySelector('.lang-switch span:first-child').textContent = langNames[lang];
             closeLangMenu();
         }
 
@@ -2558,15 +2559,9 @@
             menu.id = 'langMenu';
             menu.className = 'lang-menu';
             menu.innerHTML = `
-                <div class="lang-option ${currentLang === 'zh' ? 'active' : ''}" onclick="setLang('zh')">
-                    <span>🇨🇳</span> 简体中文
-                </div>
-                <div class="lang-option ${currentLang === 'ja' ? 'active' : ''}" onclick="setLang('ja')">
-                    <span>🇯🇵</span> 日本語
-                </div>
-                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">
-                    <span>🇺🇸</span> English
-                </div>
+                <div class="lang-option ${currentLang === 'zh' ? 'active' : ''}" onclick="setLang('zh')">中文</div>
+                <div class="lang-option ${currentLang === 'ja' ? 'active' : ''}" onclick="setLang('ja')">日本語</div>
+                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">English(US)</div>
             `;
             langSwitch.parentElement.appendChild(menu);
             setTimeout(() => menu.classList.add('show'), 10);
@@ -2683,7 +2678,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 语言检测和应用
             currentLang = detectLanguage();
-            document.querySelector('.lang-switch span:first-child').textContent = I18N[currentLang].lang_label;
+            const langNames = { 'zh': '中文', 'ja': '日本語', 'en': 'English(US)' };
+            document.querySelector('.lang-switch span:first-child').textContent = langNames[currentLang];
             applyTranslations();
             
             renderCategories();
