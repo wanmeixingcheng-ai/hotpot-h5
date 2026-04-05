@@ -1465,6 +1465,178 @@
             color: var(--text-light);
             margin-bottom: 30px;
         }
+        /* Login Page */
+        .login-header {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding-bottom: 30px;
+        }
+        
+        .login-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+        
+        .login-close, .login-more {
+            width: 30px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .login-title-bar {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .login-back-arrow {
+            padding: 10px 15px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .login-page-title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .login-form {
+            padding: 30px 20px;
+            background: white;
+            margin: -20px 15px 0;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .login-input-group {
+            display: flex;
+            align-items: center;
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 25px;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+        }
+        
+        .login-input-group:focus-within {
+            border-color: var(--primary);
+            background: white;
+        }
+        
+        .login-icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .login-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            outline: none;
+        }
+        
+        .login-eye {
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .login-links {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0 20px;
+        }
+        
+        .login-link {
+            color: #8B4513;
+            font-size: 12px;
+            text-decoration: none;
+        }
+        
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #D4A574 0%, #8B4513 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .login-btn:active {
+            opacity: 0.9;
+        }
+        
+        .login-divider {
+            text-align: center;
+            margin: 30px 0 20px;
+            position: relative;
+        }
+        
+        .login-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+        
+        .login-divider span {
+            background: white;
+            padding: 0 15px;
+            color: #999;
+            font-size: 12px;
+            position: relative;
+        }
+        
+        .login-social {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+        }
+        
+        .social-icon:nth-child(1) { background: #4267B2; } /* Facebook */
+        .social-icon:nth-child(2) { background: #12B7F5; } /* QQ */
+        .social-icon:nth-child(3) { background: #07C160; } /* WeChat */
+        .social-icon:nth-child(4) { background: #E6162D; } /* Weibo */
+        .social-icon:nth-child(5) { background: #00B900; } /* LINE */
+        
+        .login-code-btn {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: #8B4513;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .login-code-btn:active {
+            background: #eee;
+        }
+        
     </style>
 </head>
 <body>
@@ -1563,6 +1735,88 @@
         </div>
     </div>
     
+    <!-- 会员登录页 -->
+    <div class="page" id="page-login">
+        <div class="login-header">
+            <div class="login-top-bar">
+                <div class="login-close" onclick="goBack()">✕</div>
+                <div class="login-title-bar">本味主義</div>
+                <div class="login-more">⋮</div>
+            </div>
+            <div class="login-back-arrow" onclick="goBack()">←</div>
+            <div class="login-page-title">会员登录</div>
+        </div>
+        
+        <div class="login-form">
+            <div class="login-input-group">
+                <div class="login-icon">📧</div>
+                <input type="text" id="loginAccount" placeholder="请输入邮箱/手机号" class="login-input">
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">🔒</div>
+                <input type="password" id="loginPassword" placeholder="请输入登录密码" class="login-input">
+                <div class="login-eye" onclick="togglePassword()">👁</div>
+            </div>
+            
+            <div class="login-links">
+                <a href="#" class="login-link" onclick="showRegister()">暂未注册会员？立即注册</a>
+                <a href="#" class="login-link" onclick="showToast('请联系客服找回密码')">找回密码</a>
+            </div>
+            
+            <button class="login-btn" onclick="doLogin()">登 录</button>
+            
+            <div class="login-divider">
+                <span>社交账号登录</span>
+            </div>
+            
+            <div class="login-social">
+                <div class="social-icon" onclick="showToast('Facebook登录开发中')">f</div>
+                <div class="social-icon" onclick="showToast('QQ登录开发中')">Q</div>
+                <div class="social-icon" onclick="socialLogin('wechat')">微</div>
+                <div class="social-icon" onclick="showToast('微博登录开发中')">博</div>
+                <div class="social-icon" onclick="socialLogin('line')">L</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 会员注册页 -->
+    <div class="page" id="page-register">
+        <div class="login-header">
+            <div class="login-back-arrow" onclick="showPage('login')">←</div>
+            <div class="login-page-title">会员注册</div>
+        </div>
+        
+        <div class="login-form">
+            <div class="login-input-group">
+                <div class="login-icon">📧</div>
+                <input type="text" id="regEmail" placeholder="请输入邮箱地址" class="login-input">
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">📱</div>
+                <input type="tel" id="regPhone" placeholder="请输入手机号" class="login-input">
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">🔒</div>
+                <input type="password" id="regPassword" placeholder="请设置登录密码（6位以上）" class="login-input">
+            </div>
+            
+            <div class="login-input-group">
+                <div class="login-icon">🔢</div>
+                <input type="text" id="regCode" placeholder="请输入验证码" class="login-input" style="width:60%;">
+                <button class="login-code-btn" onclick="sendCode()">发送验证码</button>
+            </div>
+            
+            <button class="login-btn" onclick="doRegister()">注 册</button>
+            
+            <div class="login-links" style="margin-top:20px;">
+                <a href="#" class="login-link" onclick="showPage('login')">已有账号？立即登录</a>
+            </div>
+        </div>
+    </div>
+    
     <!-- 会员页 -->
     <div class="page" id="page-member">
         <div class="member-header">
@@ -1610,6 +1864,13 @@
             <div class="menu-item" onclick="showPage('admin')">
                 <div class="menu-icon order">⚙️</div>
                 <div class="menu-text">库存管理</div>
+                <div class="menu-arrow">›</div>
+            </div>
+        </div>
+        <div class="menu-list" style="margin-top:15px;">
+            <div class="menu-item" onclick="logout()" style="color:#E53935;">
+                <div class="menu-icon" style="background:#FFEBEE;">🚪</div>
+                <div class="menu-text">退出登录</div>
                 <div class="menu-arrow">›</div>
             </div>
         </div>
@@ -1822,7 +2083,7 @@
         </div>
         <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
-            <span>会员</span>
+            <span>我</span>
         </div>
     </div>
     
@@ -2454,8 +2715,17 @@
         
         // 页面切换
         function showPage(pageName) {
-            // 记录上一页（除了商品详情页和特殊页面）
-            if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons'].includes(pageName)) {
+            // 会员页检查登录状态
+            if (pageName === 'member') {
+                if (!isLoggedIn()) {
+                    pageName = 'login';
+                } else {
+                    updateMemberInfo();
+                }
+            }
+            
+            // 登录/注册页不需要记录上一页
+            if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register'].includes(pageName)) {
                 previousPage = pageName;
             }
             
@@ -2482,6 +2752,103 @@
         // 返回上一页
         function goBack() {
             showPage(previousPage || 'home');
+        }
+        
+        // 登录状态管理
+        function isLoggedIn() {
+            return localStorage.getItem('isLoggedIn') === 'true';
+        }
+        
+        function doLogin() {
+            const account = document.getElementById('loginAccount').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!account) {
+                showToast('请输入邮箱/手机号');
+                return;
+            }
+            if (!password) {
+                showToast('请输入登录密码');
+                return;
+            }
+            
+            // 模拟登录成功
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('memberName', account);
+            localStorage.setItem('memberLevel', '黄金会员');
+            
+            showToast('登录成功！');
+            updateMemberInfo();
+            showPage('member');
+        }
+        
+        function doRegister() {
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const code = document.getElementById('regCode').value.trim();
+            
+            if (!email || !phone || !password || !code) {
+                showToast('请填写完整信息');
+                return;
+            }
+            if (password.length < 6) {
+                showToast('密码至少6位');
+                return;
+            }
+            
+            // 模拟注册成功并登录
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('memberName', phone);
+            localStorage.setItem('memberLevel', '普通会员');
+            
+            showToast('注册成功！');
+            updateMemberInfo();
+            showPage('member');
+        }
+        
+        function showRegister() {
+            showPage('register');
+        }
+        
+        function sendCode() {
+            const phone = document.getElementById('regPhone').value.trim();
+            if (!phone) {
+                showToast('请输入手机号');
+                return;
+            }
+            showToast('验证码已发送');
+        }
+        
+        function togglePassword() {
+            const input = document.getElementById('loginPassword');
+            if (input.type === 'password') {
+                input.type = 'text';
+            } else {
+                input.type = 'password';
+            }
+        }
+        
+        function socialLogin(type) {
+            showToast(type + '登录开发中');
+        }
+        
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('memberName');
+                localStorage.removeItem('memberLevel');
+                showPage('login');
+            }
+        }
+        
+        function updateMemberInfo() {
+            if (isLoggedIn()) {
+                const name = localStorage.getItem('memberName') || '会员';
+                const level = localStorage.getItem('memberLevel') || '普通会员';
+                document.getElementById('memberName').textContent = name;
+                document.getElementById('memberLevel').textContent = level;
+            }
         }
         
         // 去结算
