@@ -3490,6 +3490,7 @@
         }
         
         function startAutoSlide() {
+            alert('startAutoSlide called');
             if (slideInterval) clearInterval(slideInterval);
             slideInterval = setInterval(() => {
                 const next = (currentSlide + 1) % 3;
