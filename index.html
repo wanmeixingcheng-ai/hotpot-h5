@@ -3489,7 +3489,10 @@
         
         function startAutoSlide() {
             if (slideInterval) clearInterval(slideInterval);
-            slideInterval = setInterval(nextSlide, 3000);
+            slideInterval = setInterval(() => {
+                const next = (currentSlide + 1) % 3;
+                goToSlide(next);
+            }, 3000);
         }
         
         function stopAutoSlide() {
