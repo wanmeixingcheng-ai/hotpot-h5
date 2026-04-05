@@ -1847,7 +1847,7 @@
         <div class="section" id="cartContent"></div>
         <div class="cart-footer" id="cartFooter" style="display:none;">
             <div class="cart-total">
-                合计: <strong id="cartTotal">¥0</strong>
+                <span id="cartTotalLabel">合计</span>: <strong id="cartTotal">¥0</strong>
             </div>
             <button id="btnCheckout" class="btn-checkout" onclick="goCheckout()">去结算</button>
         </div>
@@ -2204,7 +2204,7 @@
                     <span id="couponDiscount">-¥0</span>
                 </div>
                 <div class="order-summary-row total">
-                    <span>合计</span>
+                    <span id="checkoutTotalLabel">合计</span>
                     <strong id="finalTotal">¥0</strong>
                 </div>
             </div>
@@ -2408,7 +2408,7 @@
         </div>
         <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
-            <span class="tab-text" id="memberTabText">我</span>
+            <span class="tab-text" id="memberTabText" style="color:inherit;">我</span>
         </div>
     </div>
     
@@ -3060,6 +3060,9 @@
             // 更新去结算按钮
             const btnCheckout = document.getElementById('btnCheckout');
             if (btnCheckout) btnCheckout.textContent = t('btn_checkout');
+            // 更新购物车合计文字
+            const cartTotalLabel = document.getElementById('cartTotalLabel');
+            if (cartTotalLabel) cartTotalLabel.textContent = t('cart_total');
             // 更新分类名称
             CATEGORIES.forEach((cat, i) => {
                 cat.name = t('category_' + (i + 1));
@@ -3748,7 +3751,7 @@
                 <div class="cart-item">
                     <img class="cart-item-image" src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/80x80?text=火锅'">
                     <div class="cart-item-info">
-                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-name">${getProductName(item)}</div>
                         <div class="cart-item-price">¥${item.price.toFixed(2)}</div>
                         <div class="quantity-control">
                             <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">-</button>
