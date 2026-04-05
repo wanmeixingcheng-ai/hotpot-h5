@@ -2009,6 +2009,11 @@
     <!-- 会员注册页 -->
     <div class="page" id="page-register">
         <div class="login-header">
+            <div class="login-back-btn" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
             <div class="login-page-title">会员注册</div>
         </div>
         
@@ -3605,6 +3610,12 @@
                     if (e.key === 'Enter') handleSearch();
                 });
             }
+
+            // 监听浏览器前进/后退按钮
+            window.addEventListener('popstate', () => {
+                const savedPage = localStorage.getItem('currentPage') || 'home';
+                showPage(savedPage);
+            });
         });
         
         // 搜索处理
