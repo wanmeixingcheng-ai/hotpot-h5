@@ -1470,6 +1470,21 @@
             background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
             color: white;
             padding-bottom: 30px;
+            padding-top: 20px;
+            position: relative;
+        }
+        
+        .login-back-btn {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
         
         .login-top-bar {
@@ -1739,6 +1754,11 @@
     <!-- 会员登录页 -->
     <div class="page" id="page-login">
         <div class="login-header">
+            <div class="login-back-btn" onclick="goBack()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </div>
             <div class="login-page-title">会员登录</div>
         </div>
         
