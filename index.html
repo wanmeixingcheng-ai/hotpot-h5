@@ -1791,7 +1791,6 @@
         
         <!-- Banner -->
         <div class="banner">
-            <button onclick="startAutoSlide()" style="position:absolute;z-index:999;top:5px;right:5px;font-size:10px;padding:2px 6px;">测试轮播</button>
             <div class="banner-slider" id="bannerSlider">
                 <div class="banner-slides" id="bannerSlides">
                     <div class="banner-slide"><img src="images/999.jpg" alt="ボックス火鍋"></div>
@@ -3472,7 +3471,6 @@
         const totalSlides = 3;
         
         function goToSlide(index) {
-            alert('goToSlide ' + index);
             currentSlide = index;
             const slides = document.getElementById('bannerSlides');
             const dots = document.querySelectorAll('.banner-dot');
@@ -3490,12 +3488,8 @@
         }
         
         function startAutoSlide() {
-            alert('startAutoSlide called');
             if (slideInterval) clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                const next = (currentSlide + 1) % 3;
-                goToSlide(next);
-            }, 3000);
+            slideInterval = setInterval(nextSlide, 3000);
         }
         
         function stopAutoSlide() {
@@ -3520,7 +3514,6 @@
             
             // 恢复刷新前的页面状态
             const savedPage = localStorage.getItem('currentPage');
-            
             if (savedPage && savedPage !== 'home') {
                 showPage(savedPage);
             }
@@ -4016,11 +4009,12 @@
             // 保存当前页面状态（用于刷新恢复）
             localStorage.setItem('currentPage', pageName);
             
-            // 会员页检查登录状态（放最前面，避免清除tab样式）
+            // 会员页检查登录状态
             if (pageName === 'member') {
                 if (!isLoggedIn()) {
-                    showPage('login');
-                    return;
+                    pageName = 'login';
+                } else {
+                    updateMemberInfo();
                 }
             }
             
@@ -4044,10 +4038,6 @@
                 if (text) text.style.color = '#E53935';
             }
             
-            if (pageName === 'member') {
-                updateMemberInfo();
-            }
-            
             if (pageName === 'cart') renderCart();
             if (pageName === 'checkout') renderCheckout();
             if (pageName === 'admin') {
@@ -4058,13 +4048,11 @@
             if (pageName === 'coupons') renderMemberCoupons();
             if (pageName === 'addresses') renderAddresses();
             
-            // 首页启动轮播
-            if (pageName === 'home') startAutoSlide();
-            
             // 分类页不执行 scrollTo，避免影响切换体验
             if (pageName !== 'category') {
                 window.scrollTo(0, 0);
             }
+            if (activeTab) activeTab.classList.add('active');
         }
         
         // 返回上一页
