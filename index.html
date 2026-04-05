@@ -492,7 +492,7 @@
             letter-spacing: 0;
         }
         
-        #memberTab.active span:last-child {
+        .tab-item.active .tab-text {
             color: #E53935 !important;
         }
         
@@ -2403,9 +2403,9 @@
             <span class="tab-text" id="cartTabText">购物车</span>
             <span class="badge" id="cartBadge" style="display:none;">0</span>
         </div>
-        <div class="tab-item" onclick="showPage('member')" data-page="member" id="memberTab">
+        <div class="tab-item" onclick="showPage('member')" data-page="member">
             <span>👤</span>
-            <span id="memberTabText">我</span>
+            <span class="tab-text" id="memberTabText">我</span>
         </div>
     </div>
     
