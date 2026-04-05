@@ -3488,10 +3488,8 @@
         }
         
         function startAutoSlide() {
-            console.log('startAutoSlide called');
             if (slideInterval) clearInterval(slideInterval);
             slideInterval = setInterval(() => {
-                console.log('interval tick, currentSlide:', currentSlide);
                 const next = (currentSlide + 1) % 3;
                 goToSlide(next);
             }, 3000);
