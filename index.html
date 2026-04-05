@@ -1761,7 +1761,7 @@
         <div class="section">
             <div class="section-header">
                 <div class="section-title" id="hotTitle">🔥 热门推荐</div>
-                <div class="section-more" id="hotMore">查看更多 ›</div>
+                <div class="section-more" id="hotMore" onclick="showPage('category')">查看更多 ›</div>
             </div>
             <div class="products-grid" id="hotProducts"></div>
         </div>
@@ -2308,6 +2308,29 @@
                 order_wait_receive: '待收货',
                 order_finished: '已完成',
                 order_cancelled: '已取消',
+                // 商品名称
+                product_1: '麻辣牛油锅底 500g',
+                product_2: '番茄浓汤锅底 500g',
+                product_3: '肥牛卷 300g',
+                product_4: '嫩滑牛肉片 250g',
+                product_5: '手切鲜毛肚 200g',
+                product_6: '鲜虾滑 200g',
+                product_7: '鲍鱼 4只装',
+                product_8: '娃娃菜 300g',
+                product_9: '金针菇 200g',
+                product_10: '嫩豆腐 300g',
+                product_11: '手工面筋 200g',
+                product_12: '火锅面 500g',
+                product_13: '冰粉 2人份',
+                product_14: '王老吉凉茶 310ml',
+                product_15: '唯怡豆奶 450ml',
+                product_16: '芝麻蘸料包 5包',
+                product_17: '一次性火锅锅',
+                product_18: '一次性火锅套装',
+                // 商品详情
+                product_desc_1: '精选上等食材，新鲜配送到家',
+                product_desc_2: '适合2-4人食用',
+                product_desc_3: '请在收到后24小时内食用',
                 // 其他
                 contact_service: '请联系客服找回密码',
                 order_success: '订单提交成功',
@@ -2391,6 +2414,29 @@
                 order_wait_receive: '配達待ち',
                 order_finished: '完了',
                 order_cancelled: 'キャンセル',
+                // 商品名称
+                product_1: 'マーラー牛油鍋スープ 500g',
+                product_2: '番茄濃湯鍋スープ 500g',
+                product_3: '肥牛巻き 300g',
+                product_4: '柔らか牛肉スライス 250g',
+                product_5: '毛肚 200g',
+                product_6: 'エビ団子 200g',
+                product_7: 'アワビ 4個入り',
+                product_8: '娃娃菜 300g',
+                product_9: 'エリンギ 200g',
+                product_10: '柔らか豆腐 300g',
+                product_11: '手打ち麩 200g',
+                product_12: '火鍋麺 500g',
+                product_13: '冰冰粉 2人前',
+                product_14: '王老吉ハードリンク 310ml',
+                product_15: 'ウィエイダイソンミルク 450ml',
+                product_16: '胡麻たれ 5パック',
+                product_17: '使い捨て鍋',
+                product_18: '使い捨て鍋セット',
+                // 商品详情
+                product_desc_1: '厳選された高級食材、新鮮配送',
+                product_desc_2: '2-4人用に最適',
+                product_desc_3: '受取後24時間以内に食べてください',
                 contact_service: '客服联系してパスワードを回復',
                 order_success: '注文完了',
                 pay_success: '支払完了',
@@ -2473,6 +2519,29 @@
                 order_wait_receive: 'Pending Delivery',
                 order_finished: 'Completed',
                 order_cancelled: 'Cancelled',
+                // 商品名称
+                product_1: 'Spicy Tallow Hotpot Soup Base 500g',
+                product_2: 'Tomato Soup Hotpot Base 500g',
+                product_3: 'Premium Beef Slices 300g',
+                product_4: 'Tender Beef Slices 250g',
+                product_5: 'Fresh Beef Tripes 200g',
+                product_6: 'Shrimp Paste 200g',
+                product_7: 'Abalone 4pcs',
+                product_8: 'Baby Bok Choy 300g',
+                product_9: 'Enoki Mushrooms 200g',
+                product_10: 'Silken Tofu 300g',
+                product_11: 'Hand-made Wheat Gluten 200g',
+                product_12: 'Hotpot Noodles 500g',
+                product_13: 'Ice Jelly 2 Servings',
+                product_14: 'Wong Lo Kat Herbal Tea 310ml',
+                product_15: 'Yibai Soy Milk 450ml',
+                product_16: 'Sesame Dipping Sauce 5pcs',
+                product_17: 'Disposable Hotpot Pot',
+                product_18: 'Disposable Hotpot Set',
+                // 商品详情
+                product_desc_1: 'Premium ingredients, fresh delivery',
+                product_desc_2: 'Perfect for 2-4 people',
+                product_desc_3: 'Please consume within 24 hours of receipt',
                 contact_service: 'Please contact customer service to retrieve password',
                 order_success: 'Order Submitted Successfully',
                 pay_success: 'Payment Successful',
@@ -2842,13 +2911,14 @@
         // 渲染商品卡片
         function renderProductCard(product) {
             const imgSrc = product.image;
+            const translatedName = t('product_' + product.id) || product.name;
             return `
                 <div class="product-card" data-category="${product.category}" onclick="showProductDetail(${product.id})">
                     <div class="product-image">
-                        <img src="${imgSrc}" alt="${product.name}" loading="lazy">
+                        <img src="${imgSrc}" alt="${translatedName}" loading="lazy">
                     </div>
                     <div class="product-info">
-                        <div class="product-name">${product.name}</div>
+                        <div class="product-name">${translatedName}</div>
                         <div class="product-tags">
                             ${product.tags.map(tag => `<span class="product-tag ${tag === '热销' || tag === '爆款' ? 'hot' : ''}">${tag}</span>`).join('')}
                         </div>
@@ -3363,26 +3433,27 @@
         function showProductDetail(productId) {
             const product = PRODUCTS.find(p => p.id === productId);
             const content = document.getElementById('productDetailContent');
+            const translatedName = t('product_' + productId) || product.name;
             content.innerHTML = `
                 <img src="${product.image}" style="width:100%;aspect-ratio:1;object-fit:cover;" onerror="this.src='https://via.placeholder.com/400x400?text=火锅'">
                 <div style="padding:15px;">
-                    <div style="font-size:18px;font-weight:600;margin-bottom:10px;">${product.name}</div>
+                    <div style="font-size:18px;font-weight:600;margin-bottom:10px;">${translatedName}</div>
                     <div style="color:var(--primary);font-size:24px;font-weight:600;margin-bottom:15px;">¥${product.price.toFixed(2)} <span style="font-size:14px;color:var(--text-lighten);text-decoration:line-through;">¥${product.originalPrice.toFixed(2)}</span></div>
                     <div style="display:flex;gap:10px;margin-bottom:15px;">
                         ${product.tags.map(tag => `<span style="padding:4px 10px;background:#FFEBEE;color:var(--primary);border-radius:12px;font-size:12px;">${tag}</span>`).join('')}
-                        <span style="padding:4px 10px;background:#E8F5E9;color:var(--success);border-radius:12px;font-size:12px;">库存: ${product.stock}</span>
+                        <span style="padding:4px 10px;background:#E8F5E9;color:var(--success);border-radius:12px;font-size:12px;">${t('product_stock')}: ${product.stock}</span>
                     </div>
                     <div style="padding:15px;background:#f5f5f5;border-radius:12px;margin-bottom:80px;">
-                        <div style="font-size:14px;font-weight:600;margin-bottom:10px;">商品详情</div>
+                        <div style="font-size:14px;font-weight:600;margin-bottom:10px;">${t('product_detail')}</div>
                         <div style="font-size:13px;color:var(--text-light);line-height:1.8;">
-                            精选上等食材，新鲜配送到家<br>
-                            适合2-4人食用<br>
-                            请在收到后24小时内食用
+                            ${t('product_desc_1') || '精选上等食材，新鲜配送到家'}<br>
+                            ${t('product_desc_2') || '适合2-4人食用'}<br>
+                            ${t('product_desc_3') || '请在收到后24小时内食用'}
                         </div>
                     </div>
                 </div>
                 <div style="position:fixed;bottom:60px;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;padding:10px 15px;display:flex;gap:10px;box-shadow:0 -2px 10px var(--shadow);">
-                    <button onclick="addToCart(${product.id});showPage('cart');" style="flex:1;padding:12px;background:var(--primary);color:white;border:none;border-radius:20px;font-size:15px;cursor:pointer;">加入购物车</button>
+                    <button onclick="addToCart(${product.id});showPage('cart');" style="flex:1;padding:12px;background:var(--primary);color:white;border:none;border-radius:20px;font-size:15px;cursor:pointer;">${t('btn_add_cart')}</button>
                 </div>
             `;
             // 记录当前来源页面，切换到商品详情页时不要覆盖
