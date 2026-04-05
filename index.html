@@ -4052,11 +4052,6 @@
             if (pageName !== 'category') {
                 window.scrollTo(0, 0);
             }
-            
-            // 确保导航栏颜色正确
-            const allTabs = document.querySelectorAll('.tab-item');
-            allTabs.forEach(t => t.classList.remove('active'));
-            const activeTab = document.querySelector(`.tab-item[data-page="${pageName}"]`);
             if (activeTab) activeTab.classList.add('active');
         }
         
