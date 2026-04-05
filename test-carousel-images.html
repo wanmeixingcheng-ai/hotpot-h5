@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图片测试</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; }
+        .info { text-align: center; padding: 20px; background: #f5f5f5; }
+        
+        .banner-slider {
+            position: relative;
+            width: 100%;
+            max-width: 750px;
+            height: 300px;
+            margin: 20px auto;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        
+        .banner-slides {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        
+        .banner-slide {
+            min-width: 100%;
+            height: 100%;
+        }
+        
+        .banner-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .banner-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        .banner-control.prev { left: 10px; }
+        .banner-control.next { right: 10px; }
+        
+        .banner-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .banner-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .banner-dot.active { background: white; }
+        
+        .image-status { text-align: center; padding: 10px; }
+        .image-status img { width: 100px; height: 100px; object-fit: cover; margin: 5px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h1>轮播图片测试</h1>
+        <p>使用真实图片 images/999.jpg, images/898.jpg, images/test.jpg</p>
+    </div>
+    
+    <div class="image-status">
+        <h3>图片加载状态：</h3>
+        <img src="images/999.jpg" onerror="this.style.border='3px solid red'" onload="this.style.border='3px solid green'">
+        <img src="images/898.jpg" onerror="this.style.border='3px solid red'" onload="this.style.border='3px solid green'">
+        <img src="images/test.jpg" onerror="this.style.border='3px solid red'" onload="this.style.border='3px solid green'">
+    </div>
+    
+    <div class="banner-slider">
+        <div class="banner-slides" id="bannerSlides">
+            <div class="banner-slide"><img src="images/999.jpg" alt="图片1"></div>
+            <div class="banner-slide"><img src="images/898.jpg" alt="图片2"></div>
+            <div class="banner-slide"><img src="images/test.jpg" alt="图片3"></div>
+        </div>
+        <button class="banner-control prev" onclick="prevSlide()">‹</button>
+        <button class="banner-control next" onclick="nextSlide()">›</button>
+        <div class="banner-dots">
+            <div class="banner-dot active" onclick="goToSlide(0)"></div>
+            <div class="banner-dot" onclick="goToSlide(1)"></div>
+            <div class="banner-dot" onclick="goToSlide(2)"></div>
+        </div>
+    </div>
+    
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 3;
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            document.getElementById('bannerSlides').style.transform = `translateX(-${index * 100}%)`;
+            document.querySelectorAll('.banner-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+        
+        function nextSlide() { goToSlide((currentSlide + 1) % totalSlides); }
+        function prevSlide() { goToSlide((currentSlide - 1 + totalSlides) % totalSlides); }
+        
+        // 自动轮播
+        setInterval(nextSlide, 3000);
+        
+        // 初始状态
+        goToSlide(0);
+    </script>
+</body>
+</html>
