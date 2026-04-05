@@ -3472,6 +3472,7 @@
         const totalSlides = 3;
         
         function goToSlide(index) {
+            alert('goToSlide ' + index);
             currentSlide = index;
             const slides = document.getElementById('bannerSlides');
             const dots = document.querySelectorAll('.banner-dot');
