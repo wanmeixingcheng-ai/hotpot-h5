@@ -3518,15 +3518,6 @@
             // 恢复刷新前的页面状态
             const savedPage = localStorage.getItem('currentPage');
             
-            // 测试轮播
-            console.log('测试轮播: startAutoSlide');
-            startAutoSlide();
-            // 5秒后测试
-            setTimeout(() => {
-                console.log('测试: 切换到第2张');
-                goToSlide(1);
-            }, 5000);
-            
             if (savedPage && savedPage !== 'home') {
                 showPage(savedPage);
             }
