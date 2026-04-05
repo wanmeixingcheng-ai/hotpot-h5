@@ -494,7 +494,8 @@
         
         .tab-item.active,
         .tab-item.active span,
-        .tab-item.active .tab-text {
+        .tab-item.active .tab-text,
+        .tab-bar .tab-item.active span {
             color: var(--primary) !important;
         }
         
@@ -4022,9 +4023,17 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + pageName).classList.add('active');
             
-            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-item').forEach(t => {
+                t.classList.remove('active');
+                const text = t.querySelector('.tab-text');
+                if (text) text.style.color = '';
+            });
             const tab = document.querySelector(`.tab-item[data-page="${pageName}"]`);
-            if (tab) tab.classList.add('active');
+            if (tab) {
+                tab.classList.add('active');
+                const text = tab.querySelector('.tab-text');
+                if (text) text.style.color = 'var(--primary)';
+            }
             
             if (pageName === 'cart') renderCart();
             if (pageName === 'checkout') renderCheckout();
