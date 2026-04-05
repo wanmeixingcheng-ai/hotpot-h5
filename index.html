@@ -182,23 +182,22 @@
         }
         
         .lang-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
+            position: fixed;
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            z-index: 1000;
+            z-index: 9999;
             overflow: hidden;
             opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
+            transform: scale(0.95);
+            transition: all 0.2s ease;
             pointer-events: none;
+            min-width: 120px;
         }
         
         .lang-menu.show {
             opacity: 1;
-            transform: translateY(5px);
+            transform: scale(1);
             pointer-events: auto;
         }
         
@@ -2556,15 +2555,26 @@
 
         function showLangMenu() {
             const langSwitch = document.querySelector('.lang-switch');
+            // 移除已存在的菜单
+            const existingMenu = document.getElementById('langMenu');
+            if (existingMenu) existingMenu.remove();
+            
             const menu = document.createElement('div');
             menu.id = 'langMenu';
             menu.className = 'lang-menu';
             menu.innerHTML = `
-                <div class="lang-option ${currentLang === 'zh' ? 'active' : ''}" onclick="setLang('zh')">中文</div>
-                <div class="lang-option ${currentLang === 'ja' ? 'active' : ''}" onclick="setLang('ja')">日本語</div>
-                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en')">English(US)</div>
+                <div class="lang-option ${currentLang === 'zh' ? 'active' : ''}" onclick="setLang('zh'); event.stopPropagation();">中文</div>
+                <div class="lang-option ${currentLang === 'ja' ? 'active' : ''}" onclick="setLang('ja'); event.stopPropagation();">日本語</div>
+                <div class="lang-option ${currentLang === 'en' ? 'active' : ''}" onclick="setLang('en'); event.stopPropagation();">English(US)</div>
             `;
-            langSwitch.parentElement.appendChild(menu);
+            document.body.appendChild(menu);
+            
+            // 计算菜单位置
+            const rect = langSwitch.getBoundingClientRect();
+            menu.style.top = (rect.bottom + window.scrollY + 5) + 'px';
+            menu.style.left = (rect.left + window.scrollX) + 'px';
+            menu.style.right = 'auto';
+            
             setTimeout(() => menu.classList.add('show'), 10);
             // 点击其他区域关闭
             document.addEventListener('click', closeLangMenuOnClick);
