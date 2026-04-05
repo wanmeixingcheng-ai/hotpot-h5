@@ -4031,12 +4031,12 @@
             document.getElementById('page-' + pageName).classList.add('active');
             
             document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-text').forEach(t => t.classList.remove('active-color'));
+            document.querySelectorAll('.tab-text').forEach(t => t.style.color = '#555555');
             const tab = document.querySelector(`.tab-item[data-page="${pageName}"]`);
             if (tab) {
                 tab.classList.add('active');
                 const text = tab.querySelector('.tab-text');
-                if (text) text.classList.add('active-color');
+                if (text) text.style.color = '#E53935';
             }
             
             if (pageName === 'cart') renderCart();
