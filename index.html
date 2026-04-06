@@ -3544,8 +3544,17 @@
             
             // 恢复刷新前的页面状态
             const savedPage = localStorage.getItem('currentPage');
-            if (savedPage && savedPage !== 'home') {
-                showPage(savedPage);
+            if (savedPage) {
+                currentPage = savedPage;
+                // 直接更新页面显示
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                const el = document.getElementById('page-' + savedPage);
+                if (el) el.classList.add('active');
+                
+                // 更新 tab 高亮
+                document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                const activeTab = document.querySelector(`.tab-item[data-page="${savedPage}"]`);
+                if (activeTab) activeTab.classList.add('active');
             }
             
             // 恢复记住的登录名
@@ -3582,18 +3591,28 @@
             // 监听浏览器前进/后退按钮
             window.addEventListener('popstate', (e) => {
                 if (e.state && e.state.page) {
-                    // 浏览器前进/后退：从 history state 获取目标页
+                    // 浏览器前进/后退：直接更新当前页，不改变 previousPage
                     const targetPage = e.state.page;
-                    // 手动更新状态（因为 showPage 不会保存 history）
-                    localStorage.setItem('previousPage', currentPage);
                     currentPage = targetPage;
                     localStorage.setItem('currentPage', targetPage);
                     
+                    // 只更新页面显示，不调用 showPage（避免重复 pushState）
                     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                     const el = document.getElementById('page-' + targetPage);
                     if (el) el.classList.add('active');
                     
-                    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+                    // 更新 tab 高亮
+                    document.querySelectorAll('.tab-item').forEach(t => {
+                        t.classList.remove('active');
+                        const text = t.querySelector('.tab-text');
+                        if (text) text.style.color = '#555555';
+                    });
+                    const activeTab = document.querySelector(`.tab-item[data-page="${targetPage}"]`);
+                    if (activeTab) {
+                        activeTab.classList.add('active');
+                        const text = activeTab.querySelector('.tab-text');
+                        if (text) text.style.color = '#E53935';
+                    }
                 }
             });
         });
