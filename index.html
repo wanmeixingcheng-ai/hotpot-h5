@@ -3563,6 +3563,7 @@
                 if (savedPage === 'coupons') renderMemberCoupons();
                 if (savedPage === 'addresses') renderAddresses();
                 if (savedPage === 'member') updateMemberInfo();
+                if (savedPage === 'product' && currentProductId) showProductDetail(currentProductId);
             }
             
             // 恢复记住的登录名
@@ -4901,9 +4902,10 @@
         }
         
         // 商品详情
-        let currentProductId = null; // 保存当前查看的商品ID
+        let currentProductId = localStorage.getItem('currentProductId') ? parseInt(localStorage.getItem('currentProductId')) : null;
         function showProductDetail(productId) {
-            currentProductId = productId; // 保存当前商品ID
+            currentProductId = productId;
+            localStorage.setItem('currentProductId', productId);
             const product = PRODUCTS.find(p => p.id === productId);
             const content = document.getElementById('productDetailContent');
             if (!product || !content) {
