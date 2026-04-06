@@ -3581,19 +3581,19 @@
 
             // 监听浏览器前进/后退按钮
             window.addEventListener('popstate', (e) => {
-                // 如果有状态记录，使用状态中的页面
                 if (e.state && e.state.page) {
-                    // 交换 previousPage 和 currentPage（模拟前进/后退）
-                    const temp = currentPage;
-                    currentPage = e.state.page;
-                    localStorage.setItem('previousPage', temp);
-                    localStorage.setItem('currentPage', e.state.page);
-                    showPage(e.state.page);
-                } else {
-                    // 否则使用localStorage或默认首页
-                    const savedPage = localStorage.getItem('currentPage') || 'home';
-                    currentPage = savedPage;
-                    showPage(savedPage);
+                    // 浏览器前进/后退：从 history state 获取目标页
+                    const targetPage = e.state.page;
+                    // 手动更新状态（因为 showPage 不会保存 history）
+                    localStorage.setItem('previousPage', currentPage);
+                    currentPage = targetPage;
+                    localStorage.setItem('currentPage', targetPage);
+                    
+                    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                    const el = document.getElementById('page-' + targetPage);
+                    if (el) el.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
                 }
             });
         });
@@ -4074,38 +4074,38 @@
         }
         
         // 页面切换
+        // 页面切换
         function showPage(pageName) {
-            // 保存当前页面状态（用于刷新恢复）
-            localStorage.setItem('currentPage', pageName);
+            // 防止跳转到当前页
+            if (pageName === currentPage) return;
             
             // 会员页检查登录状态
+            let targetPage = pageName;
             if (pageName === 'member') {
                 if (!isLoggedIn()) {
-                    pageName = 'login';
+                    targetPage = 'login';
                 } else {
                     updateMemberInfo();
                 }
             }
             
-            // 登录/注册/重置页不需要记录上一页
-            if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register', 'reset'].includes(pageName)) {
-                // previousPage 记录的是进入新页面之前的那一页
-                localStorage.setItem('previousPage', currentPage);
-            }
+            // 保存上一页（用于返回按钮）
+            localStorage.setItem('previousPage', currentPage);
             
             // 更新当前页
-            currentPage = pageName;
+            currentPage = targetPage;
+            localStorage.setItem('currentPage', targetPage);
             
-            // 更新浏览器历史记录
-            history.pushState({ page: pageName }, '', '#' + pageName);
+            // 更新浏览器历史记录（用于浏览器前进/后退）
+            history.pushState({ page: targetPage }, '', '#' + targetPage);
             
-            console.log('showPage:', pageName);
+            console.log('showPage:', targetPage);
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const targetPage = document.getElementById('page-' + pageName);
-            if (targetPage) {
-                targetPage.classList.add('active');
+            const targetPageEl = document.getElementById('page-' + targetPage);
+            if (targetPageEl) {
+                targetPageEl.classList.add('active');
             } else {
-                console.error('页面未找到: page-' + pageName);
+                console.error('页面未找到: page-' + targetPage);
             }
             
             document.querySelectorAll('.tab-item').forEach(t => {
@@ -4113,36 +4113,39 @@
                 const text = t.querySelector('.tab-text');
                 if (text) text.style.color = '#555555';
             });
-            const tab = document.querySelector(`.tab-item[data-page="${pageName}"]`);
+            const tab = document.querySelector(`.tab-item[data-page="${targetPage}"]`);
             if (tab) {
                 tab.classList.add('active');
                 const text = tab.querySelector('.tab-text');
                 if (text) text.style.color = '#E53935';
             }
             
-            if (pageName === 'cart') renderCart();
-            if (pageName === 'checkout') renderCheckout();
-            if (pageName === 'admin') {
+            if (targetPage === 'cart') renderCart();
+            if (targetPage === 'checkout') renderCheckout();
+            if (targetPage === 'admin') {
                 loadProducts();
                 renderAdminProductList();
             }
-            if (pageName === 'orders') renderOrders();
-            if (pageName === 'coupons') renderMemberCoupons();
-            if (pageName === 'addresses') renderAddresses();
+            if (targetPage === 'orders') renderOrders();
+            if (targetPage === 'coupons') renderMemberCoupons();
+            if (targetPage === 'addresses') renderAddresses();
             
             // 分类页不执行 scrollTo，避免影响切换体验
-            if (pageName !== 'category') {
+            if (targetPage !== 'category') {
                 window.scrollTo(0, 0);
             }
         }
         
         // 返回上一页
         function goBack() {
-            // 从localStorage获取上一页
+            // 登录/注册/重置页：返回首页
+            if (currentPage === 'login' || currentPage === 'register' || currentPage === 'reset') {
+                showPage('home');
+                return;
+            }
+            
+            // 其他页面：返回上一页
             const prevPage = localStorage.getItem('previousPage') || 'home';
-            // 交换：当前页变成上一页（用于下次返回）
-            localStorage.setItem('previousPage', currentPage);
-            currentPage = prevPage;
             showPage(prevPage);
         }
         
