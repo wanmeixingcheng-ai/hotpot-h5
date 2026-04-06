@@ -233,11 +233,11 @@
             overflow: hidden;
             position: relative;
             box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            height: 280px;
+            height: 120px;
         }
 
         @media (max-width: 600px) {
-            .banner-slider { height: 180px; }
+            .banner-slider { height: 100px; }
         }
         
         .banner-slides {
@@ -549,6 +549,7 @@
         /* Pages */
         .page {
             display: none;
+            padding-bottom: 70px;
         }
         
         .page.active {
@@ -2101,7 +2102,7 @@
                 <div class="stat-value" id="orderCount">0</div>
                 <div class="stat-label">全部订单</div>
             </div>
-            <div class="stat-item" onclick="showCoupons()">
+            <div class="stat-item" onclick="showPage('coupons')">
                 <div class="stat-value" id="couponCount">0</div>
                 <div class="stat-label">优惠券</div>
             </div>
@@ -2116,7 +2117,7 @@
                 <div class="menu-text">我的订单</div>
                 <div class="menu-arrow">›</div>
             </div>
-            <div class="menu-item" onclick="showCoupons()">
+            <div class="menu-item" onclick="showPage('coupons')">
                 <div class="menu-icon coupon">🎫</div>
                 <div class="menu-text">我的优惠券</div>
                 <div class="menu-arrow">›</div>
@@ -2141,7 +2142,7 @@
 
         </div>
         <div class="menu-list" style="margin-top:15px;">
-            <div class="menu-item" onclick="logout()" style="color:#E53935;">
+            <div class="menu-item" id="logoutBtn" onclick="logout()" style="color:#E53935;">
                 <div class="menu-icon" style="background:#FFEBEE;">🚪</div>
                 <div class="menu-text">退出登录</div>
                 <div class="menu-arrow">›</div>
@@ -3275,7 +3276,21 @@
             const userId = localStorage.getItem('currentUserId');
             if (!userId) return null;
             const users = getUsers();
-            return users.find(u => u.id === userId);
+            const user = users.find(u => u.id === userId);
+            if (user) return user;
+            // 模拟登录模式：从localStorage构建临时用户
+            const name = localStorage.getItem('memberName');
+            const level = localStorage.getItem('memberLevel');
+            if (name && localStorage.getItem('isLoggedIn') === 'true') {
+                return {
+                    id: userId,
+                    phone: name,
+                    nickname: name,
+                    level: level || '普通会员',
+                    email: ''
+                };
+            }
+            return null;
         }
         
         // 简单密码hash
@@ -3352,48 +3367,6 @@
             localStorage.setItem('memberLevel', newUser.level);
             
             showToast('注册成功！获得100积分');
-            updateMemberInfo();
-            showPage('member');
-        }
-        
-        // 用户登录
-        function doLogin() {
-            const account = document.getElementById('loginAccount').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            
-            if (!account) {
-                showToast(t('login_account') || '请输入账号');
-                return;
-            }
-            if (!password) {
-                showToast(t('login_password') || '请输入密码');
-                return;
-            }
-            
-            const users = getUsers();
-            const user = users.find(u => u.phone === account || u.email === account);
-            
-            if (!user) {
-                showToast('账号不存在，请先注册');
-                return;
-            }
-            
-            if (!verifyPassword(password, user.password)) {
-                showToast('密码错误');
-                return;
-            }
-            
-            // 更新最后登录时间
-            user.lastLogin = new Date().toISOString();
-            saveUsers(users);
-            
-            // 保存登录状态
-            localStorage.setItem('currentUserId', user.id);
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('memberName', user.nickname);
-            localStorage.setItem('memberLevel', user.level);
-            
-            showToast('登录成功');
             updateMemberInfo();
             showPage('member');
         }
@@ -3491,12 +3464,6 @@
                     showToast('验证码已发送');
                 }, 1000);
             }
-        }
-        
-        // 显示注册页
-        function showRegister() {
-            console.log('showRegister被调用');
-            showPage('register');
         }
         
         // 显示登录页
@@ -3612,9 +3579,15 @@
             }
 
             // 监听浏览器前进/后退按钮
-            window.addEventListener('popstate', () => {
-                const savedPage = localStorage.getItem('currentPage') || 'home';
-                showPage(savedPage);
+            window.addEventListener('popstate', (e) => {
+                // 如果有状态记录，使用状态中的页面
+                if (e.state && e.state.page) {
+                    showPage(e.state.page);
+                } else {
+                    // 否则使用localStorage或默认首页
+                    const savedPage = localStorage.getItem('currentPage') || 'home';
+                    showPage(savedPage);
+                }
             });
         });
         
@@ -4107,10 +4080,13 @@
                 }
             }
             
-            // 登录/注册页不需要记录上一页
-            if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register'].includes(pageName)) {
+            // 登录/注册/重置页不需要记录上一页
+            if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register', 'reset'].includes(pageName)) {
                 previousPage = pageName;
             }
+            
+            // 更新浏览器历史记录
+            history.pushState({ page: pageName }, '', '#' + pageName);
             
             console.log('showPage:', pageName);
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -4151,8 +4127,11 @@
         
         // 返回上一页
         function goBack() {
-            console.log('goBack调用, previousPage:', previousPage);
-            showPage(previousPage || 'home');
+            // 返回上一页，如果没有记录则返回首页
+            const target = previousPage || 'home';
+            showPage(target);
+            // 清除上一页记录，避免重复返回
+            previousPage = null;
         }
         
         // 登录状态管理
@@ -4179,6 +4158,17 @@
                 return;
             }
             
+            // 检查管理员账号
+            if (account === 'admin' && password === '123456') {
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                localStorage.setItem('isAdmin', 'true');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('memberName', '管理员');
+                showToast('管理员登录成功！');
+                window.location.href = 'admin.html';
+                return;
+            }
+            
             // 记住登录名
             const rememberMe = document.getElementById('rememberAccount').checked;
             if (rememberMe) {
@@ -4192,6 +4182,7 @@
             localStorage.setItem('autoLogin', 'true');
             localStorage.setItem('memberName', account);
             localStorage.setItem('memberLevel', '黄金会员');
+            localStorage.setItem('currentUserId', 'member_' + account);
             
             showToast(t('login_success') || '登录成功！');
             updateMemberInfo();
@@ -4833,14 +4824,21 @@
         });
         
         function logout() {
-            if (confirm(t('confirm_logout') || '确定要退出登录吗？')) {
-                localStorage.removeItem('isLoggedIn');
-                localStorage.removeItem('autoLogin');
-                localStorage.removeItem('memberName');
-                localStorage.removeItem('memberLevel');
-                showPage('login');
-            }
+            console.log('logout function called');
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('autoLogin');
+            localStorage.removeItem('memberName');
+            localStorage.removeItem('memberLevel');
+            showPage('login');
         }
+        
+        // 绑定退出登录按钮事件
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', logout);
+            }
+        });
         
         function updateMemberInfo() {
             if (isLoggedIn()) {
