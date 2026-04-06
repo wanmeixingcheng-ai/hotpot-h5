@@ -3248,7 +3248,8 @@
         let currentPayment = 'wechat';
         let paymentCountdownTimer = null;
         let pendingOrder = null;
-        let previousPage = 'home'; // 记录上一页用于返回
+        let previousPage = localStorage.getItem('previousPage') || 'home'; // 记录上一页用于返回
+        let currentPage = localStorage.getItem('currentPage') || 'home'; // 记录当前页
         
         // ==================== 会员管理系统 ====================
         
@@ -3582,10 +3583,16 @@
             window.addEventListener('popstate', (e) => {
                 // 如果有状态记录，使用状态中的页面
                 if (e.state && e.state.page) {
+                    // 交换 previousPage 和 currentPage（模拟前进/后退）
+                    const temp = currentPage;
+                    currentPage = e.state.page;
+                    localStorage.setItem('previousPage', temp);
+                    localStorage.setItem('currentPage', e.state.page);
                     showPage(e.state.page);
                 } else {
                     // 否则使用localStorage或默认首页
                     const savedPage = localStorage.getItem('currentPage') || 'home';
+                    currentPage = savedPage;
                     showPage(savedPage);
                 }
             });
@@ -4082,8 +4089,12 @@
             
             // 登录/注册/重置页不需要记录上一页
             if (!['product', 'success', 'checkout', 'orders', 'addresses', 'coupons', 'login', 'register', 'reset'].includes(pageName)) {
-                previousPage = pageName;
+                // previousPage 记录的是进入新页面之前的那一页
+                localStorage.setItem('previousPage', currentPage);
             }
+            
+            // 更新当前页
+            currentPage = pageName;
             
             // 更新浏览器历史记录
             history.pushState({ page: pageName }, '', '#' + pageName);
@@ -4127,11 +4138,12 @@
         
         // 返回上一页
         function goBack() {
-            // 返回上一页，如果没有记录则返回首页
-            const target = previousPage || 'home';
-            showPage(target);
-            // 清除上一页记录，避免重复返回
-            previousPage = null;
+            // 从localStorage获取上一页
+            const prevPage = localStorage.getItem('previousPage') || 'home';
+            // 交换：当前页变成上一页（用于下次返回）
+            localStorage.setItem('previousPage', currentPage);
+            currentPage = prevPage;
+            showPage(prevPage);
         }
         
         // 登录状态管理
